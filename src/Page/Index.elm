@@ -8,7 +8,8 @@ import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Shared
 import View exposing (View)
-
+import Html exposing (..)
+import Html.Attributes exposing (..)
 
 type alias Model =
     ()
@@ -66,4 +67,11 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel static =
-    View.placeholder "Index"
+    { title = ""
+    , body = 
+            [ h1 [] [text "Welcome to My Blog" ]
+            , p [] [text "Below are my posts."]
+            , ol [] [li [] [a [href "/svd"] [text "Singular Value Decomposition (SVD)"]]]
+            ]
+    }
+

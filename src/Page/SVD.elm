@@ -1,9 +1,9 @@
-module Page.Index exposing (Data, Model, Msg, page)
+module Page.SVD exposing (Model, Msg, Data, page)
 
 import DataSource exposing (DataSource)
 import Head
 import Head.Seo as Seo
-import Page exposing (Page, StaticPayload)
+import Page exposing (Page, PageWithState, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Shared
@@ -18,10 +18,8 @@ type alias Model =
 type alias Msg =
     Never
 
-
 type alias RouteParams =
     {}
-
 
 page : Page RouteParams Data
 page =
@@ -30,6 +28,10 @@ page =
         , data = data
         }
         |> Page.buildNoState { view = view }
+
+
+type alias Data =
+    ()
 
 
 data : DataSource Data
@@ -57,10 +59,6 @@ head static =
         |> Seo.website
 
 
-type alias Data =
-    ()
-
-
 view :
     Maybe PageUrl
     -> Shared.Model
@@ -68,34 +66,16 @@ view :
     -> View Msg
 view maybeUrl sharedModel static =
     View.blog_page_scaffold 
-        "Home"
+        "SVD" 
         (div 
-        [class "max-w-xl mx-auto mt-10"] 
-        [ h1 
-            [class ""] 
-            [text "Welcome to My Blog" ]
-        , div 
-            [ class "flex space-x-3 mt-3 items-center"] 
-            [div 
-                [class "w-10 h-10 rounded-full bg-indigo-600"
-                ] 
-                [
-                ]
-            , div 
-                [
-                ] 
-                [text "Farooq Azam Khan"
-                ]
-            ]
-        , p 
-            [ class "mt-3"
+            [ 
             ] 
-            [text "Below are my posts."
+            [ h1 [] [text "Singular Value Decomposition (SVD)"]
+            , p [] [text "What is it? SVD is a very versatile tool in linear algebra. In Machine Learning it is used as a dimentionality reduction technique."]
+            , p [] [text "SVD is reduces an N dimentional matrix down to K dimensions where K < N."]
+            , p [] [text "$$A = USV^T$$"]
+            , p [] [text "where A is an m x n matrix, U is an m x r orthogonal left sigular matrix, S is an r by r diagonal matrix, and V is an r by n diagonal right singualr matrix."]
+            , p [] [text "SVD is used in recommendation engines. Also used to calculate the fast fourier transforms, linear regression, etc. Understanding this topic will greatly set you in the path of understanding and using linear algebra effectively."]
+            
             ]
-        , ol 
-            [
-            ] 
-            [ li [] [a [href "/svd"] [text "Singular Value Decomposition (SVD)"]]
-            ]
-        ]
         )

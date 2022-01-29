@@ -24,6 +24,6 @@ placeholder moduleName =
 
 blog_page_scaffold : String -> Html msg -> View msg
 blog_page_scaffold moduleName  page =
-    { title = "Placeholder - " ++ moduleName
-    , body = [ div [class "prose lg:prose-xl max-w-xl mt-10 mx-auto"] [page ]]
+    { title = moduleName
+    , body = [ div [class "prose lg:prose-xl sm:max-w-xl lg:max-w-2xl mt-10 mx-auto"] [page ]]
     }

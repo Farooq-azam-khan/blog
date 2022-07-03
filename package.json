@@ -1,7 +1,6 @@
 {
   "name": "farooq-azam-khan-blog",
   "scripts": {
-    "postinstall": "elm-tooling install",
     "start": "npm run elm:dev & npm run tailwind:dev",
     "elm:dev": "elm-live src/Main.elm -p 3000 --pushstate -- --output=elm.js --debug",
     "elm:build": "elm make src/Main.elm --output=build/elm.js --optimize",

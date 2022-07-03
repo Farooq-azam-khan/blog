@@ -1,7 +1,8 @@
-module View exposing (View, map, placeholder, blog_page_scaffold)
+module View exposing (View, blog_page_scaffold, map, placeholder)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+
 
 type alias View msg =
     { title : String
@@ -22,8 +23,9 @@ placeholder moduleName =
     , body = [ Html.text moduleName ]
     }
 
+
 blog_page_scaffold : String -> Html msg -> View msg
-blog_page_scaffold moduleName  page =
+blog_page_scaffold moduleName page =
     { title = moduleName
-    , body = [ div [class "prose lg:prose-xl sm:max-w-xl lg:max-w-2xl mt-10 mx-auto"] [page ]]
+    , body = [ div [ class "prose lg:prose-xl sm:max-w-xl lg:max-w-2xl mt-10 mx-auto" ] [ page ] ]
     }

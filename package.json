@@ -1,11 +1,13 @@
 {
-  "name": "elm-pages-app",
+  "name": "farooq-azam-khan-blog",
   "scripts": {
     "postinstall": "elm-tooling install",
-    "start": "elm-live src/Main.elm --pushstate -- --output=app.js --debug",
-    "build": "elm-pages build",
-    "tailwind:dev": "tailwindcss -i ./src/input.css -o ./public/style.css --watch", 
-    "tailwind:build": "tailwindcss -i ./src/input.css -o ./public/style.css" 
+    "start": "npm run elm:dev & npm run tailwind:dev", 
+    "elm:dev": "elm-live src/Main.elm -p 3000 --pushstate -- --output=elm.js --debug",
+    "elm:build": "elm make src/Main.elm --output=build/elm.js --optimize",
+    "build": "mkdir build & cp index.html build & npm run elm:build && npm run tailwind:build",
+    "tailwind:dev": "tailwindcss -i tailwind.css -o build.css --watch", 
+    "tailwind:build": "tailwindcss -i tailwind.css -o build/build.css --minify" 
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.1",

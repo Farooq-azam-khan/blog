@@ -1,5 +1,5 @@
 /** @typedef {{load: (Promise<unknown>); flags: (unknown)}} ElmPagesInit */
-
+import "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"
 /** @type ElmPagesInit */
 export default {
   load: async function (elmLoaded) {

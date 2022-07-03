@@ -2,9 +2,10 @@
   "name": "elm-pages-app",
   "scripts": {
     "postinstall": "elm-tooling install",
-    "start": "elm-pages dev",
+    "start": "elm-live src/Main.elm --pushstate -- --output=app.js --debug",
     "build": "elm-pages build",
-    "tailwind:dev": "tailwindcss -i ./src/input.css -o ./public/style.css --watch"
+    "tailwind:dev": "tailwindcss -i ./src/input.css -o ./public/style.css --watch", 
+    "tailwind:build": "tailwindcss -i ./src/input.css -o ./public/style.css" 
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.1",

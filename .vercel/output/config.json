@@ -4,7 +4,7 @@
     {
       "src": "\/(.)+",
       "status": 307, 
-      "header": {"Location": "https://blog-iota-three.vercel.app/$1"}
+      "headers": {"Location": "https://blog-iota-three.vercel.app/$1"}
     }
   ]
 }

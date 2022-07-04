@@ -237,6 +237,7 @@ array([[1.0000004 , 0.87545466],
                 ]
             , section []
                 [ h2 [ class "text-gray-600" ] [ text "Make it Faster Part 2: On the GPU with Pytorch" ]
+                , p [] [ text "In an upcoming blog, we will look at making the above algorithm much master, and use a real life dataset to show how powerful this implementation is." ]
                 , p [ class "text-indigo-600 text-right" ] [ text "To be Continued" ]
                 ]
             ]

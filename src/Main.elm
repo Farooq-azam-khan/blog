@@ -3,7 +3,8 @@ module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, href)
+import Pages.CosineSimilarity as CosineSimilarity
 import Pages.SVD as SVD
 import Url exposing (Url)
 import Url.Parser as Parser exposing ((</>), Parser)
@@ -15,6 +16,7 @@ type alias Model =
 
 type Page
     = SVDPage SVD.Model
+    | CosineSimilarityPage CosineSimilarity.Model
     | HomePage
     | NotFound
 
@@ -24,11 +26,13 @@ type Msg
     | ChangedUrl Url
     | ClickedLink Browser.UrlRequest
     | SVDMessages SVD.Msg
+    | CosineSimilarityMessages CosineSimilarity.Msg
 
 
 type Route
     = HomeR
     | SVDRoute
+    | CosineSimilarityR
 
 
 parser : Parser (Route -> a) a
@@ -36,6 +40,7 @@ parser =
     Parser.oneOf
         [ Parser.map HomeR Parser.top
         , Parser.map SVDRoute (Parser.s "svd")
+        , Parser.map CosineSimilarityR (Parser.s "cosine-similarity")
         ]
 
 
@@ -64,6 +69,14 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        CosineSimilarityMessages cs_page_messages ->
+            case model.page of
+                CosineSimilarityPage cs_model ->
+                    toCosineSimilarity model (CosineSimilarity.update cs_page_messages cs_model)
+
+                _ ->
+                    ( model, Cmd.none )
+
 
 updateUrl : Url -> Model -> ( Model, Cmd Msg )
 updateUrl url model =
@@ -74,6 +87,9 @@ updateUrl url model =
         Just HomeR ->
             ( { model | page = HomePage }, Cmd.none )
 
+        Just CosineSimilarityR ->
+            toCosineSimilarity model CosineSimilarity.init
+
         Nothing ->
             ( { model | page = NotFound }, Cmd.none )
 
@@ -81,6 +97,13 @@ updateUrl url model =
 toSVD : Model -> ( SVD.Model, Cmd SVD.Msg ) -> ( Model, Cmd Msg )
 toSVD model ( svd_model, svd_cmd ) =
     ( { model | page = SVDPage svd_model }, Cmd.map SVDMessages svd_cmd )
+
+
+toCosineSimilarity : Model -> ( CosineSimilarity.Model, Cmd CosineSimilarity.Msg ) -> ( Model, Cmd Msg )
+toCosineSimilarity model ( cs_model, cs_cmd ) =
+    ( { model | page = CosineSimilarityPage cs_model }
+    , Cmd.map CosineSimilarityMessages cs_cmd
+    )
 
 
 init : flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
@@ -91,20 +114,53 @@ init _ url key =
 view : Model -> Browser.Document Msg
 view model =
     let
-        content =
+        ( title, blog_header, content ) =
             case model.page of
                 SVDPage svd_model ->
-                    SVD.view svd_model |> Html.map SVDMessages
+                    ( "svd"
+                    , "Singular Value Decomposition"
+                    , SVD.view svd_model |> Html.map SVDMessages
+                    )
+
+                CosineSimilarityPage cs_model ->
+                    ( "cosine-similarity"
+                    , cs_model.title
+                    , CosineSimilarity.view cs_model |> Html.map CosineSimilarityMessages
+                    )
 
                 HomePage ->
-                    div [] [ text "Home Page" ]
+                    ( "Home"
+                    , "Welcome to My Blog"
+                    , home_page_content
+                    )
 
                 NotFound ->
-                    div [] [ text "url not found" ]
+                    ( "Not Found"
+                    , "Page Not Found"
+                    , div [] [ text "url not found" ]
+                    )
     in
-    { title = "Welcome to My Blog"
-    , body = [ div [ class "prose lg:prose-xl sm:max-w-xl lg:max-w-2xl mt-10 mx-auto" ] [ h1 [] [ text "Welcome to My Blog" ], content ] ]
+    { title = "Farooq A. Khan | Blog | " ++ title
+    , body =
+        [ div
+            [ class "prose lg:prose-xl sm:max-w-xl lg:max-w-2xl mt-10 mx-auto" ]
+            [ h1
+                []
+                [ text blog_header ]
+            , content
+            ]
+        ]
     }
+
+
+home_page_content : Html Msg
+home_page_content =
+    div []
+        [ ol []
+            [ li [] [ a [ href "/svd" ] [ text "SVD" ] ]
+            , li [] [ a [ href "/cosine-similarity" ] [ text "Cosine Similarity" ] ]
+            ]
+        ]
 
 
 main : Program () Model Msg

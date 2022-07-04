@@ -4,7 +4,7 @@
     {
       "src": "/(.*)",
       "status": 307, 
-      "headers": { "Location": "https://example.com/$1" }
+      "destination": "/"
     }
   ]
 }

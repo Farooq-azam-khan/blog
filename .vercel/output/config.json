@@ -3,8 +3,8 @@
   "routes": [
     {
       "src": "/(.*)",
-      "status": 307,
-      "dest": "index.html"
+      "status": 307, 
+      "headers": { "Location": "https://example.com/$1" }
     }
   ]
 }

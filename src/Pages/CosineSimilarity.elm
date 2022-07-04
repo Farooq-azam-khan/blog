@@ -14,6 +14,7 @@ import Katex as K
 passage : List Latex
 passage =
     [ human "We will work with cosine similarity here."
+    , display "cos(\\theta) = \\frac{x\\cdot y}{xy}"
     ]
 
 

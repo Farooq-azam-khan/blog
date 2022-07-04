@@ -52,8 +52,7 @@
                   display: true
                 }]});
           console.log('highlighting text')
-          hljs.highlightAll();
-
+          document.querySelectorAll('pre code').forEach(block => hljs.highlightBlock(block))
       })
     </script>
 

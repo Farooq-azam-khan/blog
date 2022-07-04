@@ -2,7 +2,7 @@
   "version": 3,
   "routes": [
     {
-      "src": "\/(.)+",
+      "src": "/(.*)",
       "status": 307, 
       "headers": {"Location": "https://blog-iota-three.vercel.app/$1"}
     }

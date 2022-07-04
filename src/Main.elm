@@ -128,7 +128,7 @@ view model =
             case model.page of
                 SVDPage svd_model ->
                     ( "svd"
-                    , "Singular Value Decomposition"
+                    , svd_model.title
                     , SVD.view svd_model |> Html.map SVDMessages
                     )
 
@@ -167,7 +167,11 @@ home_page_content : Html Msg
 home_page_content =
     div []
         [ ol []
-            [ li [] [ a [ href "/svd" ] [ text "SVD" ] ]
+            [ if (Tuple.first SVD.init).is_draft then
+                li [ class "text-grey-100" ] [ text "SVD" ]
+
+              else
+                li [] [ a [ href "/svd" ] [ text "SVD" ] ]
             , li [] [ a [ href "/cosine-similarity" ] [ text "Cosine Similarity" ] ]
             ]
         ]

@@ -26,8 +26,12 @@ passage =
     ]
 
 
+
+-- if it is a draft, then show title but, link is not clickable and is greyed out
+
+
 type alias Model =
-    {}
+    { title : String, date_added : String, is_draft : Bool }
 
 
 type Msg
@@ -61,4 +65,4 @@ view model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( { is_draft = True, title = "Singular Value Decomposition", date_added = "TBD" }, Cmd.none )

@@ -167,12 +167,9 @@ home_page_content : Html Msg
 home_page_content =
     div []
         [ ol []
-            [ if (Tuple.first SVD.init).is_draft then
-                li [ class "text-grey-100" ] [ text "SVD" ]
-
-              else
-                li [] [ a [ href "/svd" ] [ text "SVD" ] ]
-            , li [] [ a [ href "/cosine-similarity" ] [ text "Cosine Similarity" ] ]
+            [ -- li [] [ a [ href "/svd" ] [ text "SVD" ] ]
+              -- ,
+              li [] [ a [ href "/cosine-similarity" ] [ text "Cosine Similarity" ] ]
             ]
         ]
 

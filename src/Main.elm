@@ -31,7 +31,6 @@ type Msg
     | ClickedLink Browser.UrlRequest
     | SVDMessages SVD.Msg
     | CosineSimilarityMessages CosineSimilarity.Msg
-    | TriggerLatex
 
 
 type Route
@@ -69,7 +68,7 @@ update msg model =
         SVDMessages svd_page_message ->
             case model.page of
                 SVDPage svd_model ->
-                    toSVD model (SVD.update svd_page_message svd_model) (sendUrlChangedData "svd")
+                    toSVD model (SVD.update svd_page_message svd_model)
 
                 _ ->
                     ( model, Cmd.none )
@@ -82,9 +81,6 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
-        TriggerLatex ->
-            ( model, sendUrlChangedData "url" )
-
 
 updateUrl : Url -> Model -> ( Model, Cmd Msg )
 updateUrl url model =
@@ -94,7 +90,7 @@ updateUrl url model =
     in
     case Parser.parse parser url of
         Just SVDRoute ->
-            toSVD model SVD.init send_data_cmd
+            toSVD model SVD.init
 
         Just HomeR ->
             ( { model | page = HomePage }, Cmd.none )
@@ -106,23 +102,17 @@ updateUrl url model =
             ( { model | page = NotFound }, Cmd.none )
 
 
-sendMsg : msg -> Cmd msg
-sendMsg msg =
-    Task.succeed msg
-        |> Task.perform identity
-
-
-toSVD : Model -> ( SVD.Model, Cmd SVD.Msg ) -> Cmd msg -> ( Model, Cmd Msg )
-toSVD model ( svd_model, svd_cmd ) tell_js =
+toSVD : Model -> ( SVD.Model, Cmd SVD.Msg ) -> ( Model, Cmd Msg )
+toSVD model ( svd_model, svd_cmd ) =
     ( { model | page = SVDPage svd_model }
-    , Cmd.batch [ sendMsg TriggerLatex, Cmd.map SVDMessages svd_cmd ]
+    , Cmd.batch [ sendUrlChangedData "svd", Cmd.map SVDMessages svd_cmd ]
     )
 
 
 toCosineSimilarity : Model -> ( CosineSimilarity.Model, Cmd CosineSimilarity.Msg ) -> ( Model, Cmd Msg )
 toCosineSimilarity model ( cs_model, cs_cmd ) =
     ( { model | page = CosineSimilarityPage cs_model }
-    , Cmd.map CosineSimilarityMessages cs_cmd
+    , Cmd.batch [ Cmd.map CosineSimilarityMessages cs_cmd, sendUrlChangedData "cosine-similarity" ]
     )
 
 

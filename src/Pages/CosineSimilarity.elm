@@ -15,7 +15,10 @@ import Katex as K
 view : Model -> Html a
 view model =
     div [ class "mb-40" ]
-        [ p [ class "text-grey-600" ]
+        [ p [ class "text-gray-500 text-sm" ]
+            [ text "Monay July 4th, 2022" ]
+        , p
+            [ class "text-grey-600" ]
             [ span [ class "font-medium" ] [ text "Summary" ]
             , text ": This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformer libraries in python."
             ]

@@ -3,7 +3,7 @@ port module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
-import Html.Attributes exposing (class, href)
+import Html.Attributes exposing (class, href, src)
 import Pages.CosineSimilarity as CosineSimilarity
 import Pages.SVD as SVD
 import Task
@@ -153,23 +153,58 @@ view model =
     { title = "Farooq A. Khan | Blog | " ++ title
     , body =
         [ div
-            [ class "prose lg:prose-xl sm:max-w-xl lg:max-w-2xl mt-10 mx-auto" ]
-            [ h1
-                []
-                [ text blog_header ]
+            [ class "prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10 mx-auto" ]
+            [ div [ class "flex items-center space-x-3" ]
+                [ img [ class "rounded-full w-32 h-32", src "https://avatars.githubusercontent.com/u/33574913?v=4" ]
+                    []
+                , h1
+                    [ class "tracking-wide" ]
+                    [ text blog_header ]
+                ]
             , content
             ]
         ]
     }
 
 
+blog_list_post_component : { published_date : String, post_title : String, post_link : String, post_summary : String } -> Html Msg
+blog_list_post_component blog_data =
+    div
+        [ class "hover:bg-orange-100 py-2 rounded hover:rounded-lg ease-in duration-200 border-l-4  border-white hover:border-indigo-400 px-3 flex flex-col space-y-2" ]
+        [ span [ class "text-indigo-600 " ] [ text blog_data.published_date ]
+        , span [ class "mt-3" ]
+            [ a
+                [ href blog_data.post_link ]
+                [ text blog_data.post_title ]
+            ]
+        , span [ class "text-gray-700" ]
+            [ text blog_data.post_summary
+            ]
+        ]
+
+
 home_page_content : Html Msg
 home_page_content =
-    div []
-        [ ol []
-            [ -- li [] [ a [ href "/svd" ] [ text "SVD" ] ]
-              -- ,
-              li [] [ a [ href "/cosine-similarity" ] [ text "Cosine Similarity" ] ]
+    div [ class "" ]
+        [ -- li [] [ a [ href "/svd" ] [ text "SVD" ] ]
+          -- ,
+          div [ class "space-y-2" ]
+            [ blog_list_post_component
+                { post_title = "Cosine Similarity"
+                , published_date = "July 4th, 2022"
+                , post_link = "/cosine-similarity"
+                , post_summary = "In this blog, we will aim to understand the cosine function and its applications. Specifically we will look at comparing two strings and their similarity score."
+                }
+            ]
+        , div []
+            [ h2 [ class "text-gray-700" ] [ text "Drafts" ]
+            , ul [ class "list-disc" ]
+                [ li [] [ text "Singular Value Decomposition and Recommendation Engines" ]
+                , li [] [ text "What Principal Component Analysis teaches us about Dimensionality reduction" ]
+                , li [] [ text "The Deep Learning Model Development Architecture" ]
+                , li [] [ text "Linear Regression: The Basis for all Modern Deep Learning Algorithms" ]
+                , li [] [ text "What RNNs are and why they are Turing Complete!" ]
+                ]
             ]
         ]
 

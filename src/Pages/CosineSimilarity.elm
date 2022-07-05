@@ -86,7 +86,7 @@ view model =
                     , human " in terms of calculating the vector encodings for each document, assuming calculating the encodings and the cosine similarity is constant time complexity."
                     ]
                 , compile_latex_code
-                    [ human "Although we cannot get past the"
+                    [ human "Although we cannot get past the "
                     , inline "O(n^2)"
                     , human " limit set on our time complexity we can definitely make the algorithm faster. For one, the encodings for each document is being calculated more than once. We can pre-compute that. Secondly, we are using python to calculate the cosine similarity. Using underlying numpy's matrix multiplication will also make the computation faster."
                     ]
@@ -97,8 +97,9 @@ view model =
                 , compile_latex_code
                     [ human "So if you have "
                     , inline "n"
-                    , human "documents, you do not want to compare against itself either. Thus the number computations reduce by 1/2."
-                    , human "It becomes: "
+                    , human " documents, you do not want to compare against itself either. Thus the number computations reduce by "
+                    , inline "\\frac{1}{2}"
+                    , human ". It becomes: "
                     , inline "(n^2-1) / 2"
                     ]
                 , pre []
@@ -125,14 +126,14 @@ view model =
                 , ul []
                     [ li [] [ text "Redundant document encoding can be fixed with a hashmap" ]
                     , li []
-                        [ text "Does not leerage fast C libraries for fast operations. Can be fixed with numpy arrays and matrix manipulation"
+                        [ text "Does not leverage fast C libraries for fast operations. Can be fixed with numpy arrays and matrix manipulation"
                         ]
                     ]
                 ]
             , section []
                 [ h2 [] [ text "Make it Faster Part 1: Matrix Multiplication" ]
                 , p []
-                    [ text "Let stack all document encodin by row within a matrix. To make it simpler we will use a 2d vector representation for each document (in practice, as above, these dimension scale to 600+)."
+                    [ text "Let stack all document encodings rowise within a matrix. To make it simpler we will use a 2d vector representation for each document (in practice, as above, these dimension scale to 600+)."
                     , compile_latex_code [ human "Let, ", inline "x = [a,b]", human " and ", inline "y = [c,d]", human "." ]
                     ]
                 , compile_latex_code
@@ -169,10 +170,12 @@ A = \\begin{bmatrix}
                   """
                     ]
                 , p []
-                    [ text "Notice that this gives us the numerator portion of our cosine function. Why does this work? This is because the numerator is a dot product operation. That is what matrix multiplication is. A dot product. "
+                    [ text "Notice that this gives us the numerator portion of our cosine function. Why does this work? This is because the numerator is a dot product operation. That is what matrix multiplication is. A dot product!"
                     ]
-                , p []
-                    [ text "All that is left now is to get the denominator and do an element wise division with our A matrix to get the cosine similarities. "
+                , compile_latex_code
+                    [ human "All that is left now is to get the denominator and do an element wise division with our "
+                    , inline "A"
+                    , human " matrix to get the cosine similarities. "
                     ]
                 , p []
                     [ text "In order to get the denominator for each pair of vectors, we first need to get the magnitude of each element. That works as follows. " ]
@@ -240,7 +243,7 @@ array([[1.0000004 , 0.87545466],
                 ]
             , section []
                 [ h2 [ class "text-gray-600" ] [ text "Make it Faster Part 2: On the GPU with Pytorch" ]
-                , p [] [ text "In an upcoming blog, we will look at making the above algorithm much master, and use a real life dataset to show how powerful this implementation is." ]
+                , p [] [ text "In an upcoming blog, we will look at making the above algorithm much faster, and use a real life dataset to show how powerful this implementation is." ]
                 , p [ class "text-indigo-600 text-right" ] [ text "To be Continued" ]
                 ]
             ]

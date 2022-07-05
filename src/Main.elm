@@ -3,7 +3,7 @@ port module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
-import Html.Attributes exposing (class, href, src)
+import Html.Attributes exposing (alt, class, href, src, target)
 import Pages.CosineSimilarity as CosineSimilarity
 import Pages.SVD as SVD
 import Task
@@ -155,10 +155,12 @@ view model =
         [ div
             [ class "prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10 mx-auto" ]
             [ div [ class "flex items-center space-x-3" ]
-                [ img [ class "rounded-full w-32 h-32", src "https://avatars.githubusercontent.com/u/33574913?v=4" ]
-                    []
+                [ a [ target "blank", class "flex-shrink-0", href "http://www.github.com/farooq-azam-khan" ]
+                    [ img [ alt "image of Farooq Azam Khan", class "rounded-full w-32 h-32", src "https://avatars.githubusercontent.com/u/33574913?v=4" ]
+                        []
+                    ]
                 , h1
-                    [ class "tracking-wide" ]
+                    [ class "hover:underline tracking-wide" ]
                     [ text blog_header ]
                 ]
             , content
@@ -190,7 +192,7 @@ home_page_content =
           -- ,
           div [ class "space-y-2" ]
             [ blog_list_post_component
-                { post_title = "Cosine Similarity"
+                { post_title = "Comapring Vectors with Cosine Simlarity Function"
                 , published_date = "July 4th, 2022"
                 , post_link = "/cosine-similarity"
                 , post_summary = "In this blog, we will aim to understand the cosine function and its applications. Specifically we will look at comparing two strings and their similarity score."

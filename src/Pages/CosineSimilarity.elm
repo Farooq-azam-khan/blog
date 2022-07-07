@@ -16,47 +16,52 @@ view : Model -> Html a
 view model =
     div [ class "mb-40" ]
         [ p [ class "text-gray-500 text-sm" ]
-            [ text "Monay July 4th, 2022" ]
+            [ text "Monday July 4th, 2022" ]
         , p
             [ class "text-grey-600" ]
             [ span [ class "font-medium" ] [ text "Summary" ]
-            , text ": This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformer libraries in python."
+            , text ": This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
             ]
         , section []
             [ h2 [] [ text "What is Cosine Similarity?" ]
-            , p [] [ text "Cosine similarity aims to measure the angle between two vecotrs. The angle is an indicator of how close the vectors are to each other. If the angle is 1, then the two vectors lie on top of each other are are exactly the same. If the angle is 0, then the vectors. This is very useful when we have a vector representaion of something and we want to compare it to another vecotr. For example, we can compoare two sentences together." ]
+            , p [] [ text "Cosine similarity is a mathematical fuction that aims to measure the angle between two vecotrs. The angle is an indicator of how close the vectors are to each other. If the angle is 1, then the two vectors lie on top of each other; thus, are exactly the same. If the angle is 0, then the vectors are perpendicular. This is very useful when we want to compare one thing to another and see if they are the same. All we have to do is get a vector representaion of the two objects and apply a cosine similarity function to it. For example, we can compare sentences." ] -- idea: do this blog but with images as well
             , ul []
-                [ li [] [ text "\"The quick brown fox jumps over the lazy dogs\"" ]
-                , li [] [ text "\"The quick fox jumped over the dogs\"" ]
+                [ li [] [ text "\"The quick brown fox jumps over the lazy dogs.\"" ]
+                , li [] [ text "\"The quick fox jumped over the dogs.\"" ]
                 ]
-            , p [] [ text "We would like to have a vector representation of these two sentences such that their similarity score is close to 1 (i.e. 100%)" ]
-            , p [] [ text "Other application include, impage comparison, plagarism detection, etc." ]
+            , p [] [ text "Semantically, these two sentences are saying the same thing, but the adjectives in the second sentence are removed. Programmatically generating a rule based system to verify if these two sentences are similar would be difficult. In vector form the task is much simpler. We would like to have a vector representation of these two sentences such that their similarity score is close to 1 (i.e. 100%)." ]
+            , p [] [ text "Other applications include, impage comparison, plagarism detection, etc." ]
             , section [ class "space-y-5" ]
                 [ h2 [] [ text "How do you calculate it?" ]
                 , p [] [ text "Below is the formula to calculate cosine similarity" ]
                 , compile_latex_code cosine_sim
-                , compile_latex_code [ human "Let ", inline "x = [1,2,3]", human " and ", inline "y=[4,5,6]" ]
+                , p []
+                    [ text "We perform a dot product on the two vectors and then we normalize with respect to both vectors." ]
+                , compile_latex_code [ human "Let ", inline "x = [1,2,3]", human " and ", inline "y=[4,5,6]", human "." ]
                 , compile_latex_code [ human "The dot product is", display "[1,2,3] \\cdot [4,5,6] = 3 + 10 + 18 = 32", human "And the magnitude is", display "1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14", display "4^2 + 5^2 + 6^2 = 77" ]
                 , p []
                     [ text "The similarity between the two vectors is"
                     , compile_latex_code [ display "\\frac{32}{14\\cdot 77} = 0.029" ]
                     ]
-                , p [] [ text "Granted this does not show the power the cosine function has, we will look at more interesting examples below." ]
                 ]
             , section [ class "space-y-2" ]
                 [ h2 [] [ text "A Complex Example" ]
-                , p [] [ text "We will use a deep learning model to generate vector representations of sentenes in an attempt to find similarities between sentences using the cosine similarity function" ]
+                , p [] [ text "We will use a pretrained deep learning model to generate vector representations of sentenes in an attempt to find similarities between sentences using the cosine similarity function." ]
                 , pre []
                     [ code [ class "python" ] python_sentence_sim_code ]
                 , p []
                     [ text "The above example imports the tentence transformers library ("
                     , code [] [ text "pip install sentence-transfomers" ]
                     , text "). "
-                    , text "We use the 'paraphrase-Mini-L6-v2' model for calculating the encodings for each sentence. After applying the cosine similarity function we get a score of 0.875 which indicates the two sentences are very similary."
+                    , text "We use the "
+                    , code [] [ text "paraphrase-Mini-L6-v2" ]
+                    , text " model for calculating the encodings for each sentence. After applying the cosine similarity function we get a score of 0.875 which indicates the two sentences are very similar."
                     ]
+                , p [] [ text "Note that the similarity score will differ depending on the model we select; however, maximizing the accuracy is not the point of this blog. I am more interested in scaling the solution to large datasets." ]
                 ]
             , section [ class "space-y-2" ]
-                [ p []
+                [ h2 [] [ text "Large Scale Solution" ]
+                , p []
                     [ text "Suppose you have a list of documents (could be tens of thoushands) and you would like to compare all of them against each other. It would be very simple to get the vector encodings and do an element wise compairson. Below is the code; however, it is slow and redundant."
                     ]
                 , pre []
@@ -65,7 +70,7 @@ view model =
                         , text "\tnumerator = np.dot(arr1, arr2)\n"
                         , text "\tmag1 = np.sqrt(np.sum(np.square(arr1)))\n"
                         , text "\tmag2 = np.sqrt(np.sum(np.square(arr2)))\n"
-                        , text "\treturn number / (mag1*mag2)"
+                        , text "\treturn numerator / (mag1*mag2)"
                         ]
                     , code [ class "python" ]
                         [ text "def get_document_similarities(model, documents: List[str]):\n"
@@ -88,11 +93,19 @@ view model =
                 , compile_latex_code
                     [ human "Although we cannot get past the "
                     , inline "O(n^2)"
-                    , human " limit set on our time complexity we can definitely make the algorithm faster. For one, the encodings for each document is being calculated more than once. We can pre-compute that. Secondly, we are using python to calculate the cosine similarity. Using underlying numpy's matrix multiplication will also make the computation faster."
+                    , human " limit set on our time complexity we can definitely make the algorithm faster."
+                    ]
+                , ol
+                    []
+                    [ li [] [ text "The encodings for each document is being calculated more than once. We can pre-compute that." ]
+                    , li []
+                        [ text
+                            "We are using python to calculate the cosine similarity. Using underlying numpy's matrix multiplication will also make the computation faster."
+                        ]
                     ]
                 ]
             , section []
-                [ h2 [] [ text "Get rid of Redundancy" ]
+                [ h3 [] [ text "Part 1: Get rid of Redundancy" ]
                 , p [] [ text "Cosine simlarity is order independent, i.e.", code [] [ text "similarity(doc1, doc2) = similarity(doc2, doc1)" ], text "." ]
                 , compile_latex_code
                     [ human "So if you have "
@@ -131,7 +144,7 @@ view model =
                     ]
                 ]
             , section []
-                [ h2 [] [ text "Make it Faster Part 1: Matrix Multiplication" ]
+                [ h3 [] [ text "Part 2: Matrix Multiplication" ]
                 , p []
                     [ text "Let stack all document encodings rowise within a matrix. To make it simpler we will use a 2d vector representation for each document (in practice, as above, these dimension scale to 600+)."
                     , compile_latex_code [ human "Let, ", inline "x = [a,b]", human " and ", inline "y = [c,d]", human "." ]
@@ -154,7 +167,7 @@ view model =
                 , compile_latex_code [ human "Lets multiply ", inline "A", human " by ", inline "A^T" ]
                 , compile_latex_code
                     [ display """
-A = \\begin{bmatrix}
+AA^T = \\begin{bmatrix}
    a & b \\\\
    c & d
 \\end{bmatrix} \\cdot \\begin{bmatrix}
@@ -191,7 +204,7 @@ A = \\begin{bmatrix}
    c^2 & d^2
 \\end{bmatrix}"""
                     ]
-                , compile_latex_code [ human "Sum all rows in the ", inline "A^2", human " matrix and set the resulting vector to", inline "b", human "." ]
+                , compile_latex_code [ human "Sum all rows in the ", inline "A^2", human " matrix and set the resulting vector to ", inline "b", human "." ]
                 , compile_latex_code
                     [ display """
                   b = \\begin{bmatrix}
@@ -226,7 +239,7 @@ A = \\begin{bmatrix}
                         [ text """def cosine_similarity_faster(model, documents: List[str]):
 \tdocument_encodings = np.array([model.encode(doc) for doc in documents])
 \tnumerator = np.matmul(document_encodings, document_encodings.T)
-\trow_sum = np.sqrt(np.sum(np.square(matrix), axis=1, keepdims=True))
+\trow_sum = np.sqrt(np.sum(np.square(document_encodings), axis=1, keepdims=True))
 \tdenominator = np.matmul(row_sum, row_sum.T)
 \treturn numerator / denominator # will be done elementwise 
 \t

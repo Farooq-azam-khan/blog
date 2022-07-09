@@ -5,6 +5,7 @@ import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (alt, class, href, src, target)
 import Pages.CosineSimilarity as CosineSimilarity
+import Pages.CosineSimilarityPt2 as CosineSimilarityPt2
 import Pages.SVD as SVD
 import Task
 import Url exposing (Url)
@@ -21,6 +22,7 @@ type alias Model =
 type Page
     = SVDPage SVD.Model
     | CosineSimilarityPage CosineSimilarity.Model
+    | CosineSimilarityPt2Page CosineSimilarityPt2.Model
     | HomePage
     | NotFound
 
@@ -31,12 +33,14 @@ type Msg
     | ClickedLink Browser.UrlRequest
     | SVDMessages SVD.Msg
     | CosineSimilarityMessages CosineSimilarity.Msg
+    | CosineSimilarityPt2Messages CosineSimilarityPt2.Msg
 
 
 type Route
     = HomeR
     | SVDRoute
     | CosineSimilarityR
+    | CosineSimilarityPt2R
 
 
 parser : Parser (Route -> a) a
@@ -45,6 +49,7 @@ parser =
         [ Parser.map HomeR Parser.top
         , Parser.map SVDRoute (Parser.s "svd")
         , Parser.map CosineSimilarityR (Parser.s "cosine-similarity")
+        , Parser.map CosineSimilarityPt2R (Parser.s "cosine-similarity-pt2")
         ]
 
 
@@ -81,6 +86,14 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        CosineSimilarityPt2Messages cs_page_messages ->
+            case model.page of
+                CosineSimilarityPt2Page cs_model ->
+                    toCosineSimilarityPt2 model (CosineSimilarityPt2.update cs_page_messages cs_model)
+
+                _ ->
+                    ( model, Cmd.none )
+
 
 updateUrl : Url -> Model -> ( Model, Cmd Msg )
 updateUrl url model =
@@ -98,6 +111,9 @@ updateUrl url model =
         Just CosineSimilarityR ->
             toCosineSimilarity model CosineSimilarity.init
 
+        Just CosineSimilarityPt2R ->
+            toCosineSimilarityPt2 model CosineSimilarityPt2.init
+
         Nothing ->
             ( { model | page = NotFound }, Cmd.none )
 
@@ -113,6 +129,15 @@ toCosineSimilarity : Model -> ( CosineSimilarity.Model, Cmd CosineSimilarity.Msg
 toCosineSimilarity model ( cs_model, cs_cmd ) =
     ( { model | page = CosineSimilarityPage cs_model }
     , Cmd.batch [ Cmd.map CosineSimilarityMessages cs_cmd, sendUrlChangedData "cosine-similarity" ]
+    )
+
+
+toCosineSimilarityPt2 : Model -> ( CosineSimilarityPt2.Model, Cmd CosineSimilarityPt2.Msg ) -> ( Model, Cmd Msg )
+toCosineSimilarityPt2 model ( cs_model, cs_cmd ) =
+    ( { model
+        | page = CosineSimilarityPt2Page cs_model
+      }
+    , Cmd.batch [ Cmd.map CosineSimilarityPt2Messages cs_cmd, sendUrlChangedData "cosine-similarity-pt2" ]
     )
 
 
@@ -137,6 +162,9 @@ view model =
                     , cs_model.title
                     , CosineSimilarity.view cs_model |> Html.map CosineSimilarityMessages
                     )
+
+                CosineSimilarityPt2Page cspt2_model ->
+                    ( "cosine-similarity-pt2", cspt2_model.title, CosineSimilarityPt2.view cspt2_model |> Html.map CosineSimilarityPt2Messages )
 
                 HomePage ->
                     ( "Home"
@@ -192,6 +220,12 @@ home_page_content =
           -- ,
           div [ class "space-y-2" ]
             [ blog_list_post_component
+                { post_title = "Large Scale Sentence Comparison"
+                , published_date = "July 9th, 2022"
+                , post_link = "/cosine-similarity-pt2"
+                , post_summary = ""
+                }
+            , blog_list_post_component
                 { post_title = "Comapring Vectors with Cosine Simlarity Function"
                 , published_date = "July 4th, 2022"
                 , post_link = "/cosine-similarity"

@@ -1,8 +1,8 @@
 module Pages.CosineSimilarity exposing (..)
 
-import Helper exposing (htmlGenerator)
+import Helper exposing (compile_latex_code, htmlGenerator)
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, href)
 import Katex as K
     exposing
         ( Latex
@@ -257,7 +257,9 @@ array([[1.0000004 , 0.87545466],
             , section []
                 [ h3 [ class "text-gray-600" ] [ text "Make it Faster Part 3: On the GPU with Pytorch" ]
                 , p [] [ text "In an upcoming blog, we will look at making the above algorithm much faster, and use a real life dataset to show how powerful this implementation is." ]
-                , p [ class "text-indigo-600 text-right" ] [ text "To be Continued" ]
+                , p [ class "text-indigo-600 text-right" ]
+                    [ a [ href "/cosine-similarity-pt2" ] [ text "To be Continued" ]
+                    ]
                 ]
             ]
         ]
@@ -281,11 +283,15 @@ python_sentence_sim_code =
     ]
 
 
-compile_latex_code : List Latex -> Html a
-compile_latex_code lst =
-    lst
-        |> List.map (K.generate htmlGenerator)
-        |> div [ class "py-2" ]
+
+{-
+   compile_latex_code : List Latex -> Html a
+   compile_latex_code lst =
+       lst
+           |> List.map (K.generate htmlGenerator)
+           |> div [ class "py-2" ]
+
+-}
 
 
 cosine_sim : List Latex
@@ -306,11 +312,9 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         NoOp ->
-            ( model
-            , Cmd.none
-            )
+            ( model, Cmd.none )
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { title = "Comapring Vectors with Cosine Simlarity Function" }, Cmd.none )
+    ( { title = "Comparing Vectors with Cosine Simlarity Function" }, Cmd.none )

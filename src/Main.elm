@@ -2,6 +2,7 @@ port module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
+import Helper exposing (BlogPostMetaData)
 import Html exposing (..)
 import Html.Attributes exposing (alt, class, href, src, target)
 import Pages.CosineSimilarity as CosineSimilarity
@@ -52,23 +53,15 @@ parser =
     Parser.oneOf
         [ Parser.map HomeR Parser.top
         , Parser.map SVDRoute (Parser.s "svd")
-        , parse_blog_page_post_link CosineSimilarityR CosineSimilarity.init
-        , parse_blog_page_post_link CosineSimilarityPt2R CosineSimilarityPt2.init
+        , parse_blog_page_post_link CosineSimilarityR (Tuple.first CosineSimilarity.init).meta_data
+        , parse_blog_page_post_link CosineSimilarityPt2R (Tuple.first CosineSimilarityPt2.init).meta_data
         ]
 
 
 blog_posts_lists : List BlogPostMetaData
 blog_posts_lists =
-    [ { post_title = "Large Scale Sentence Comparison"
-      , published_date = "July 9th, 2022"
-      , post_link = "/cosine-similarity-pt2"
-      , post_summary = "We will look at the Quora Question Similarity Dataset and aim to find a similarity model."
-      }
-    , { post_title = "Comapring Vectors with Cosine Simlarity Function"
-      , published_date = "July 4th, 2022"
-      , post_link = "/cosine-similarity"
-      , post_summary = "In this blog, we will aim to understand the cosine function and its applications. Specifically we will look at comparing two strings and their similarity score."
-      }
+    [ (Tuple.first CosineSimilarityPt2.init).meta_data
+    , (Tuple.first CosineSimilarity.init).meta_data
     ]
 
 
@@ -83,12 +76,12 @@ page_content_view model =
 
         CosineSimilarityPage cs_model ->
             ( "cosine-similarity"
-            , cs_model.title
+            , cs_model.meta_data.title
             , CosineSimilarity.view cs_model |> Html.map CosineSimilarityMessages
             )
 
         CosineSimilarityPt2Page cspt2_model ->
-            ( "cosine-similarity-pt2", cspt2_model.title, CosineSimilarityPt2.view cspt2_model |> Html.map CosineSimilarityPt2Messages )
+            ( "cosine-similarity-pt2", cspt2_model.meta_data.title, CosineSimilarityPt2.view cspt2_model |> Html.map CosineSimilarityPt2Messages )
 
         HomePage ->
             ( "Home"
@@ -189,7 +182,7 @@ updateUrl url model =
             ( { model | page = NotFound }, Cmd.none )
 
 
-blog_list_post_component : { a | published_date : String, post_title : String, post_link : String, post_summary : String } -> Html msg
+blog_list_post_component : BlogPostMetaData -> Html msg
 blog_list_post_component blog_data =
     div
         [ class "hover:bg-orange-100 py-2 rounded hover:rounded-lg ease-in duration-200 border-l-4  border-white hover:border-indigo-400 px-3 flex flex-col space-y-2" ]
@@ -197,20 +190,12 @@ blog_list_post_component blog_data =
         , span [ class "mt-3" ]
             [ a
                 [ href blog_data.post_link ]
-                [ text blog_data.post_title ]
+                [ text blog_data.title ]
             ]
         , span [ class "text-gray-700" ]
-            [ text blog_data.post_summary
+            [ text blog_data.summary
             ]
         ]
-
-
-type alias BlogPostMetaData =
-    { post_title : String
-    , published_date : String
-    , post_link : String
-    , post_summary : String
-    }
 
 
 home_page_content : Html Msg
@@ -249,12 +234,12 @@ mapToPageActivity model page cmd_msg ( pg_model, pg_msg ) =
 
 parse_blog_page_post_link :
     Route
-    -> ( { m | post_link : String }, Cmd msg )
+    -> BlogPostMetaData
     -> Parser (Route -> a) a
-parse_blog_page_post_link route init_func =
+parse_blog_page_post_link route meta_data =
     Parser.map route
         (Parser.s
-            (Tuple.first init_func).post_link
+            meta_data.post_link
         )
 
 

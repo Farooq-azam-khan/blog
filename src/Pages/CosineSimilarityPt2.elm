@@ -16,6 +16,7 @@ type alias Model =
     { title : String
     , published_date : String
     , summary : String
+    , post_link : String
     }
 
 
@@ -24,6 +25,7 @@ init =
     ( { title = "Large Scale Vector Comparison"
       , published_date = "July 9th, 2022"
       , summary = "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs."
+      , post_link = "cosine-similarity-pt2"
       }
     , Cmd.none
     )

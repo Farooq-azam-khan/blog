@@ -16,6 +16,7 @@ type alias Model =
     { title : String
     , published_date : String
     , summary : String
+    , post_link : String
     }
 
 
@@ -24,6 +25,7 @@ init =
     ( { title = "Comparing Vectors with Cosine Simlarity Function"
       , published_date = "July 4th, 2022"
       , summary = "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
+      , post_link = "cosine-similarity"
       }
     , Cmd.none
     )

@@ -20,6 +20,7 @@ type alias Model =
 
 
 -- To add a new page: add a Route, Page, Page Msg, route parser,
+-- blog post list, page content view, update
 
 
 type Route
@@ -51,8 +52,8 @@ parser =
     Parser.oneOf
         [ Parser.map HomeR Parser.top
         , Parser.map SVDRoute (Parser.s "svd")
-        , Parser.map CosineSimilarityR (Parser.s "cosine-similarity")
-        , Parser.map CosineSimilarityPt2R (Parser.s "cosine-similarity-pt2")
+        , parse_blog_page_post_link CosineSimilarityR CosineSimilarity.init
+        , parse_blog_page_post_link CosineSimilarityPt2R CosineSimilarityPt2.init
         ]
 
 
@@ -188,7 +189,7 @@ updateUrl url model =
             ( { model | page = NotFound }, Cmd.none )
 
 
-blog_list_post_component : { published_date : String, post_title : String, post_link : String, post_summary : String } -> Html Msg
+blog_list_post_component : { a | published_date : String, post_title : String, post_link : String, post_summary : String } -> Html msg
 blog_list_post_component blog_data =
     div
         [ class "hover:bg-orange-100 py-2 rounded hover:rounded-lg ease-in duration-200 border-l-4  border-white hover:border-indigo-400 px-3 flex flex-col space-y-2" ]
@@ -244,6 +245,17 @@ mapToPageActivity model page cmd_msg ( pg_model, pg_msg ) =
     ( { model | page = page pg_model }
     , Cmd.batch [ Cmd.map cmd_msg pg_msg, sendUrlChangedData "url_changed" ]
     )
+
+
+parse_blog_page_post_link :
+    Route
+    -> ( { m | post_link : String }, Cmd msg )
+    -> Parser (Route -> a) a
+parse_blog_page_post_link route init_func =
+    Parser.map route
+        (Parser.s
+            (Tuple.first init_func).post_link
+        )
 
 
 init : flags -> Url -> Nav.Key -> ( Model, Cmd Msg )

@@ -53,8 +53,8 @@ parser =
     Parser.oneOf
         [ Parser.map HomeR Parser.top
         , Parser.map SVDRoute (Parser.s "svd")
-        , parse_blog_page_post_link CosineSimilarityR (Tuple.first CosineSimilarity.init).meta_data
-        , parse_blog_page_post_link CosineSimilarityPt2R (Tuple.first CosineSimilarityPt2.init).meta_data
+        , parse_blog_page_post_link CosineSimilarityR <| get_model_meta_data CosineSimilarity.init
+        , parse_blog_page_post_link CosineSimilarityPt2R <| get_model_meta_data CosineSimilarityPt2.init
         ]
 
 
@@ -241,6 +241,11 @@ parse_blog_page_post_link route meta_data =
         (Parser.s
             meta_data.post_link
         )
+
+
+get_model_meta_data : ( { m | meta_data : BlogPostMetaData }, Cmd msg ) -> BlogPostMetaData
+get_model_meta_data ( model, _ ) =
+    model.meta_data
 
 
 init : flags -> Url -> Nav.Key -> ( Model, Cmd Msg )

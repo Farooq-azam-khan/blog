@@ -128,7 +128,7 @@ _ = cosine_similarity_matrix(model, traindf['question1'][:10].tolist())
                   """
                         ]
                     ]
-                , p [] [ text "It would take 4.5 mins for the matrix implementation to finish." ]
+                , p [] [ text "It would take 4.5 mins for the matrix implementation to finish given that we have sufficient memory." ]
                 ]
             ]
         , section []

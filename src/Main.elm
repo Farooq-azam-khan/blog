@@ -7,7 +7,6 @@ import Html.Attributes exposing (alt, class, href, src, target)
 import Pages.CosineSimilarity as CosineSimilarity
 import Pages.CosineSimilarityPt2 as CosineSimilarityPt2
 import Pages.SVD as SVD
-import Task
 import Url exposing (Url)
 import Url.Parser as Parser exposing ((</>), Parser)
 
@@ -57,6 +56,77 @@ parser =
         ]
 
 
+blog_posts_lists : List BlogPostMetaData
+blog_posts_lists =
+    [ { post_title = "Large Scale Sentence Comparison"
+      , published_date = "July 9th, 2022"
+      , post_link = "/cosine-similarity-pt2"
+      , post_summary = "We will look at the Quora Question Similarity Dataset and aim to find a similarity model."
+      }
+    , { post_title = "Comapring Vectors with Cosine Simlarity Function"
+      , published_date = "July 4th, 2022"
+      , post_link = "/cosine-similarity"
+      , post_summary = "In this blog, we will aim to understand the cosine function and its applications. Specifically we will look at comparing two strings and their similarity score."
+      }
+    ]
+
+
+page_content_view : Model -> ( String, String, Html Msg )
+page_content_view model =
+    case model.page of
+        SVDPage svd_model ->
+            ( "svd"
+            , svd_model.title
+            , SVD.view svd_model |> Html.map SVDMessages
+            )
+
+        CosineSimilarityPage cs_model ->
+            ( "cosine-similarity"
+            , cs_model.title
+            , CosineSimilarity.view cs_model |> Html.map CosineSimilarityMessages
+            )
+
+        CosineSimilarityPt2Page cspt2_model ->
+            ( "cosine-similarity-pt2", cspt2_model.title, CosineSimilarityPt2.view cspt2_model |> Html.map CosineSimilarityPt2Messages )
+
+        HomePage ->
+            ( "Home"
+            , "Welcome to My Blog"
+            , home_page_content
+            )
+
+        NotFound ->
+            ( "Not Found"
+            , "Page Not Found"
+            , div [] [ text "url not found" ]
+            )
+
+
+view : Model -> Browser.Document Msg
+view model =
+    let
+        ( title, blog_header, content ) =
+            page_content_view model
+    in
+    { title = title ++ "| Blog | Farooq A. Khan"
+    , body =
+        [ div
+            [ class "mx-5 sm:mx-0 sm:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10 " ]
+            [ div [ class "sm:flex sm:items-center space-x-3" ]
+                [ a [ target "blank", class "flex-shrink-0", href "http://www.github.com/farooq-azam-khan" ]
+                    [ img [ alt "image of Farooq Azam Khan", class "rounded-full w-32 h-32", src "https://avatars.githubusercontent.com/u/33574913?v=4" ]
+                        []
+                    ]
+                , h1
+                    [ class "hover:underline tracking-wide" ]
+                    [ text blog_header ]
+                ]
+            , content
+            ]
+        ]
+    }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -77,7 +147,6 @@ update msg model =
         SVDMessages svd_page_message ->
             case model.page of
                 SVDPage svd_model ->
-                    -- toSVD model (SVD.update svd_page_message svd_model)
                     mapToPageActivity model SVDPage SVDMessages (SVD.update svd_page_message svd_model)
 
                 _ ->
@@ -86,7 +155,6 @@ update msg model =
         CosineSimilarityMessages cs_page_messages ->
             case model.page of
                 CosineSimilarityPage cs_model ->
-                    -- toCosineSimilarity model (CosineSimilarity.update cs_page_messages cs_model)
                     mapToPageActivity model CosineSimilarityPage CosineSimilarityMessages (CosineSimilarity.update cs_page_messages cs_model)
 
                 _ ->
@@ -95,7 +163,6 @@ update msg model =
         CosineSimilarityPt2Messages cs_page_messages ->
             case model.page of
                 CosineSimilarityPt2Page cs_model ->
-                    -- toCosineSimilarityPt2 model (CosineSimilarityPt2.update cs_page_messages cs_model)
                     mapToPageActivity model CosineSimilarityPt2Page CosineSimilarityPt2Messages (CosineSimilarityPt2.update cs_page_messages cs_model)
 
                 _ ->
@@ -104,117 +171,21 @@ update msg model =
 
 updateUrl : Url -> Model -> ( Model, Cmd Msg )
 updateUrl url model =
-    let
-        send_data_cmd =
-            sendUrlChangedData (Url.toString url)
-    in
     case Parser.parse parser url of
         Just SVDRoute ->
-            -- toSVD model SVD.init
             mapToPageActivity model SVDPage SVDMessages SVD.init
 
         Just HomeR ->
             ( { model | page = HomePage }, Cmd.none )
 
         Just CosineSimilarityR ->
-            -- toCosineSimilarity model CosineSimilarity.init
             mapToPageActivity model CosineSimilarityPage CosineSimilarityMessages CosineSimilarity.init
 
         Just CosineSimilarityPt2R ->
-            -- toCosineSimilarityPt2 model CosineSimilarityPt2.init
             mapToPageActivity model CosineSimilarityPt2Page CosineSimilarityPt2Messages CosineSimilarityPt2.init
 
         Nothing ->
             ( { model | page = NotFound }, Cmd.none )
-
-
-mapToPageActivity : Model -> (other_pg_model -> Page) -> (other_pg_msg -> Msg) -> ( other_pg_model, Cmd other_pg_msg ) -> ( Model, Cmd Msg )
-mapToPageActivity model page cmd_msg ( pg_model, pg_msg ) =
-    ( { model | page = page pg_model }
-    , Cmd.batch [ Cmd.map cmd_msg pg_msg, sendUrlChangedData "url_changed" ]
-    )
-
-
-
-{-
-   toSVD : Model -> ( SVD.Model, Cmd SVD.Msg ) -> ( Model, Cmd Msg )
-   toSVD model ( svd_model, svd_cmd ) =
-       ( { model | page = SVDPage svd_model }
-       , Cmd.batch [ sendUrlChangedData "svd", Cmd.map SVDMessages svd_cmd ]
-       )
--}
-{-
-   toCosineSimilarity : Model -> ( CosineSimilarity.Model, Cmd CosineSimilarity.Msg ) -> ( Model, Cmd Msg )
-   toCosineSimilarity model ( cs_model, cs_cmd ) =
-       ( { model | page = CosineSimilarityPage cs_model }
-       , Cmd.batch [ Cmd.map CosineSimilarityMessages cs_cmd, sendUrlChangedData "cosine-similarity" ]
-       )
--}
-{-
-   toCosineSimilarityPt2 : Model -> ( CosineSimilarityPt2.Model, Cmd CosineSimilarityPt2.Msg ) -> ( Model, Cmd Msg )
-   toCosineSimilarityPt2 model ( cs_model, cs_cmd ) =
-       ( { model
-           | page = CosineSimilarityPt2Page cs_model
-         }
-       , Cmd.batch [ Cmd.map CosineSimilarityPt2Messages cs_cmd, sendUrlChangedData "cosine-similarity-pt2" ]
-       )
--}
-
-
-init : flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
-init _ url key =
-    updateUrl url { page = NotFound, key = key }
-
-
-view : Model -> Browser.Document Msg
-view model =
-    let
-        ( title, blog_header, content ) =
-            case model.page of
-                SVDPage svd_model ->
-                    ( "svd"
-                    , svd_model.title
-                    , SVD.view svd_model |> Html.map SVDMessages
-                    )
-
-                CosineSimilarityPage cs_model ->
-                    ( "cosine-similarity"
-                    , cs_model.title
-                    , CosineSimilarity.view cs_model |> Html.map CosineSimilarityMessages
-                    )
-
-                CosineSimilarityPt2Page cspt2_model ->
-                    ( "cosine-similarity-pt2", cspt2_model.title, CosineSimilarityPt2.view cspt2_model |> Html.map CosineSimilarityPt2Messages )
-
-                HomePage ->
-                    ( "Home"
-                    , "Welcome to My Blog"
-                    , home_page_content
-                    )
-
-                NotFound ->
-                    ( "Not Found"
-                    , "Page Not Found"
-                    , div [] [ text "url not found" ]
-                    )
-    in
-    { title = "Farooq A. Khan | Blog | " ++ title
-    , body =
-        [ div
-            [ class "mx-5 sm:mx-0 sm:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10 " ]
-            [ div [ class "sm:flex sm:items-center space-x-3" ]
-                [ a [ target "blank", class "flex-shrink-0", href "http://www.github.com/farooq-azam-khan" ]
-                    [ img [ alt "image of Farooq Azam Khan", class "rounded-full w-32 h-32", src "https://avatars.githubusercontent.com/u/33574913?v=4" ]
-                        []
-                    ]
-                , h1
-                    [ class "hover:underline tracking-wide" ]
-                    [ text blog_header ]
-                ]
-            , content
-            ]
-        ]
-    }
 
 
 blog_list_post_component : { published_date : String, post_title : String, post_link : String, post_summary : String } -> Html Msg
@@ -233,26 +204,19 @@ blog_list_post_component blog_data =
         ]
 
 
+type alias BlogPostMetaData =
+    { post_title : String
+    , published_date : String
+    , post_link : String
+    , post_summary : String
+    }
+
+
 home_page_content : Html Msg
 home_page_content =
     div [ class "" ]
-        [ -- li [] [ a [ href "/svd" ] [ text "SVD" ] ]
-          -- ,
-          div [ class "space-y-2" ]
-            [ blog_list_post_component
-                { post_title = "Large Scale Sentence Comparison"
-                , published_date = "July 9th, 2022"
-                , post_link = "/cosine-similarity-pt2"
-                , post_summary = "We will look at the Quora Question Similarity Dataset and aim to find a similarity model."
-                }
-            , blog_list_post_component
-                { post_title = "Comapring Vectors with Cosine Simlarity Function"
-                , published_date = "July 4th, 2022"
-                , post_link = "/cosine-similarity"
-                , post_summary = "In this blog, we will aim to understand the cosine function and its applications. Specifically we will look at comparing two strings and their similarity score."
-                }
-            ]
-        , div []
+        [ section [ class "space-y-2" ] (List.map blog_list_post_component blog_posts_lists)
+        , section []
             [ h2 [ class "text-gray-700" ] [ text "Drafts" ]
             , ul [ class "list-disc" ]
                 [ li [] [ text "Singular Value Decomposition and Recommendation Engines" ]
@@ -268,6 +232,23 @@ home_page_content =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
+
+
+mapToPageActivity :
+    Model
+    -> (other_pg_model -> Page)
+    -> (other_pg_msg -> Msg)
+    -> ( other_pg_model, Cmd other_pg_msg )
+    -> ( Model, Cmd Msg )
+mapToPageActivity model page cmd_msg ( pg_model, pg_msg ) =
+    ( { model | page = page pg_model }
+    , Cmd.batch [ Cmd.map cmd_msg pg_msg, sendUrlChangedData "url_changed" ]
+    )
+
+
+init : flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
+init _ url key =
+    updateUrl url { page = NotFound, key = key }
 
 
 main : Program () Model Msg

@@ -11,6 +11,21 @@ import Katex as K
         )
 
 
+page_view_template : { a | published_date : String, summary : String } -> Html msg -> Html msg
+page_view_template model children =
+    div
+        [ class "mb-40" ]
+        [ p [ class "text-gray-500 text-sm" ] [ text model.published_date ]
+        , p
+            [ class "text-grey-600" ]
+            [ span [ class "font-medium" ] [ text "Summary" ]
+            , text ": "
+            , text model.summary
+            ]
+        , children
+        ]
+
+
 compile_latex_code : List Latex -> Html a
 compile_latex_code lst =
     lst

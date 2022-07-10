@@ -11,6 +11,14 @@ import Katex as K
         )
 
 
+type alias BlogPostMetaData =
+    { title : String
+    , published_date : String
+    , post_link : String
+    , summary : String
+    }
+
+
 page_view_template : { a | published_date : String, summary : String } -> Html msg -> Html msg
 page_view_template model children =
     div

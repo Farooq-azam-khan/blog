@@ -1,6 +1,6 @@
 module Pages.CosineSimilarityPt2 exposing (..)
 
-import Helper exposing (htmlGenerator, page_view_template)
+import Helper exposing (BlogPostMetaData, page_view_template)
 import Html exposing (..)
 import Html.Attributes exposing (class, href, target)
 import Katex as K
@@ -13,19 +13,17 @@ import Katex as K
 
 
 type alias Model =
-    { title : String
-    , published_date : String
-    , summary : String
-    , post_link : String
-    }
+    { meta_data : BlogPostMetaData }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { title = "Large Scale Vector Comparison"
-      , published_date = "July 9th, 2022"
-      , summary = "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs."
-      , post_link = "cosine-similarity-pt2"
+    ( { meta_data =
+            { title = "Large Scale Vector Comparison"
+            , published_date = "July 9th, 2022"
+            , summary = "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs."
+            , post_link = "cosine-similarity-pt2"
+            }
       }
     , Cmd.none
     )
@@ -34,7 +32,7 @@ init =
 view : Model -> Html a
 view model =
     page_view_template
-        model
+        model.meta_data
     <|
         div
             []

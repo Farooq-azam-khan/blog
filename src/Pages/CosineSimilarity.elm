@@ -1,6 +1,11 @@
 module Pages.CosineSimilarity exposing (..)
 
-import Helper exposing (compile_latex_code, htmlGenerator, page_view_template)
+import Helper
+    exposing
+        ( BlogPostMetaData
+        , compile_latex_code
+        , page_view_template
+        )
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Katex as K
@@ -13,19 +18,24 @@ import Katex as K
 
 
 type alias Model =
-    { title : String
-    , published_date : String
-    , summary : String
-    , post_link : String
+    { meta_data : BlogPostMetaData
+
+    {- title : String
+       , published_date : String
+       , summary : String
+       , post_link : String
+    -}
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { title = "Comparing Vectors with Cosine Simlarity Function"
-      , published_date = "July 4th, 2022"
-      , summary = "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
-      , post_link = "cosine-similarity"
+    ( { meta_data =
+            { title = "Comparing Vectors with Cosine Simlarity Function"
+            , published_date = "July 4th, 2022"
+            , summary = "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
+            , post_link = "cosine-similarity"
+            }
       }
     , Cmd.none
     )
@@ -34,7 +44,7 @@ init =
 view : Model -> Html a
 view model =
     page_view_template
-        model
+        model.meta_data
     <|
         div []
             [ section []

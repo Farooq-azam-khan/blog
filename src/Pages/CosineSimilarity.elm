@@ -66,7 +66,7 @@ view model =
                     ]
                 , pre []
                     [ code [ class "python" ]
-                        [ text "def ge_cosine_similarity(arr1, arr2):\n"
+                        [ text "def get_cosine_similarity(arr1, arr2):\n"
                         , text "\tnumerator = np.dot(arr1, arr2)\n"
                         , text "\tmag1 = np.sqrt(np.sum(np.square(arr1)))\n"
                         , text "\tmag2 = np.sqrt(np.sum(np.square(arr2)))\n"
@@ -226,8 +226,8 @@ AA^T = \\begin{bmatrix}
    |x| &
    |y|
 \\end{bmatrix} = \\begin{bmatrix}
-   |x|^2 & |y| |x| \\\\
-   |x| |y| & |y|^2
+   |x|^2 & |y|\\cdot |x| \\\\
+   |x|\\cdot |y| & |y|^2
 \\end{bmatrix}
                   """
                     ]
@@ -255,10 +255,10 @@ array([[1.0000004 , 0.87545466],
                     ]
                 ]
             , section []
-                [ h3 [ class "text-gray-600" ] [ text "Make it Faster Part 3: On the GPU with Pytorch" ]
+                [ h3 [ class "text-gray-600" ] [ text "Make it Faster Part 3" ]
                 , p [] [ text "In an upcoming blog, we will look at making the above algorithm much faster, and use a real life dataset to show how powerful this implementation is." ]
-                , p [ class "text-indigo-600 text-right" ]
-                    [ a [ href "/cosine-similarity-pt2" ] [ text "To be Continued" ]
+                , p [ class "text-right" ]
+                    [ a [ class "text-indigo-600", href "/cosine-similarity-pt2" ] [ text "To be Continued" ]
                     ]
                 ]
             ]
@@ -281,17 +281,6 @@ python_sentence_sim_code =
     , text "np.dot(s1_encoding, s2_encoding) / (mag_s1 * mag_s2)\n"
     , text "# Output: 0.8754566\n"
     ]
-
-
-
-{-
-   compile_latex_code : List Latex -> Html a
-   compile_latex_code lst =
-       lst
-           |> List.map (K.generate htmlGenerator)
-           |> div [ class "py-2" ]
-
--}
 
 
 cosine_sim : List Latex

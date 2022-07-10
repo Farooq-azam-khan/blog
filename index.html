@@ -38,8 +38,13 @@
         })
       // render the math formulas when the url changes
       app.ports.sendUrlChangedData.subscribe((data) => {
-          console.log('changed url...')
-            renderMathInElement(document.body, {
+        console.log('changed url...')
+        renderPageOnLoad()
+      })
+      renderPageOnLoad()
+      function renderPageOnLoad() {
+        console.log('rendering page content')
+        renderMathInElement(document.body, {
               delimiters: [
                 {
                   left: "$begin-inline$", 
@@ -50,10 +55,13 @@
                   left: "$begin-display$",
                   right: "$end-display$", 
                   display: true
-                }]});
-          console.log('highlighting text')
-          document.querySelectorAll('pre code').forEach(block => hljs.highlightBlock(block))
-      })
+                }]
+        });
+
+        console.log('highlighting text')
+        document.querySelectorAll('pre code').forEach(block => hljs.highlightBlock(block))
+
+      }
     </script>
 
     <script>

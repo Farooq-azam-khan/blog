@@ -2,9 +2,14 @@ import './tailwind.css'
 import { Elm } from './src/Main.elm' 
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderLatexElements() 
+    const root = document.getElementById('app')
+    if (!root) { 
+        console.log('root element not found') 
+        return 
+    } 
+    root.onload = renderPageOnLoad()
     const app = Elm.Main.init({
-          node: document.getElementById('app')
+          node: root 
     })
     
     // render the math formulas when the url changes
@@ -12,10 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('changed url...')
         renderPageOnLoad()
     })
-      renderPageOnLoad()
+    
+    app.ports.renderPageData.subscribe((data) => {
+        console.log('rendering on load...')
+        renderPageOnLoad()
+    })
+
+
+    
 })
 
 function renderPageOnLoad() {
+    console.log('rendering page on load') 
     renderLatexElements()
     document.querySelectorAll('pre code').forEach(block => hljs.highlightBlock(block))
 }

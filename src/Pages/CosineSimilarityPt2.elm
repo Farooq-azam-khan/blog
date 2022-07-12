@@ -1,6 +1,6 @@
 module Pages.CosineSimilarityPt2 exposing (..)
 
-import Helper exposing (BlogPostMetaData, page_view_template)
+import Helper exposing (BlogPostMetaData, blog_section, page_view_template)
 import Html exposing (..)
 import Html.Attributes exposing (class, href, target)
 import Katex as K
@@ -21,7 +21,7 @@ init =
     ( { meta_data =
             { title = "Large Scale Vector Comparison"
             , published_date = "July 9th, 2022"
-            , summary = "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs."
+            , summary = "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs. The purpose of is to look at a real dataset."
             , post_link = "cosine-similarity-pt2"
             }
       }
@@ -36,10 +36,10 @@ view model =
     <|
         div
             []
-            [ section []
+            [ blog_section
                 [ h2 [] [ text "The Dataset" ]
                 , p []
-                    [ text "We will use quora's qna dataset for list of question pairs."
+                    [ text "We will use quora's qna dataset for list of question pairs. "
                     , text "The dataset can be found "
                     , a [ target "blank", href "https://www.kaggle.com/competitions/quora-question-pairs/data" ]
                         [ text "here"
@@ -56,7 +56,7 @@ view model =
                 []
                 [ h2 [] [ text "Review of Previous Blog" ]
                 , p []
-                    [ text "We implemented three different ways of comparing vectors. Code is listed below." ]
+                    [ text "In the previous blog, we implemented three different ways of comparing vectors. Code is listed below of the three methods each faster than the last." ]
                 , pre []
                     [ code []
                         [ text """import numpy as np 
@@ -153,6 +153,11 @@ _ = cosine_similarity_matrix(model, traindf['question1'][:10].tolist())
                 ]
             , section []
                 [ h2 [] [ text "Pytorch Matrix Multiplication" ]
+                , p
+                    []
+                    [ text "Since we are doing a lot of matrix multiplication we can leverage the power of a GPU to make these calculations run in parallel and make the algorithm faster. The Numpy library does not run on the GPU. It runs on the CPU. We must port our algorithm to a library that runs code on the GPU, i.e. pytorch." ]
+                , p []
+                    [ text "Fortunately, pytorch is designed to replicate many of the SDK calls numpy offers. We merely need to replace the numpy calls with pytorch calls. The code below does that." ]
                 , pre []
                     [ code [ class "python" ]
                         [ text """# replace np with torch 
@@ -165,11 +170,27 @@ def cosine_similarity_matrix_with_torch_cuda(model, documents: List[str]):
   return numerator / denominator # will be done elementwise """
                         ]
                     ]
-                , p [] [ text "You can use the cuda option of pytorch for the matrix multiplication with google colab." ]
-                , p [] [ text "Note, ", code [] [ text "device" ], text " is defined below." ]
-                , pre [] [ code [ class "python" ] [ text """import torch 
+                , p
+                    []
+                    [ text "Instead of creating a numpy array, we conver the document encodings to a torch tensor. You can use the cuda option in the, "
+                    , a
+                        [ href "https://colab.research.google.com/"
+                        , target "blank"
+                        ]
+                        [ text "google colab" ]
+                    , text " runtime to follow along with this blog. "
+                    ]
+                , p
+                    []
+                    [ text "Note, ", code [] [ text "device" ], text " is defined below." ]
+                , pre
+                    []
+                    [ code
+                        [ class "python" ]
+                        [ text """import torch 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
-print(device) #cuda""" ] ]
+print(device) #cuda""" ]
+                    ]
                 , section []
                     [ h3 [] [ text "Experiment #3" ]
                     , pre []
@@ -178,8 +199,12 @@ print(device) #cuda""" ] ]
 _ = cosine_similarity_matrix_with_torch_cuda(model, traindf['question1'].tolist()[:500])"""
                             ]
                         ]
+                    , p
+                        []
+                        [ text "The pytorch version, on a CUDA device, runs 30ms faster on a question set of 500 examples. This would take approximately 4 mins."
+                        ]
                     ]
-                , p [] [ text "The matrix implementation does not scale." ]
+                , p [] [ text "The matrix implementation does not scale either. We are presented with a different problem here:" ]
                 , pre []
                     [ code [ class "python" ]
                         [ text "_ = cosine_similarity_matrix_with_torch_cuda(model, traindf['question1'].tolist()[:50_000])"
@@ -189,7 +214,7 @@ _ = cosine_similarity_matrix_with_torch_cuda(model, traindf['question1'].tolist(
 #See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF"""
                         ]
                     ]
-                , p [] [ text "You get a run time error with 50k rows of data." ]
+                , p [] [ text "With a question set of 50k rows, we get an out of memory error." ]
                 ]
             ]
 

@@ -15,6 +15,9 @@ import Url.Parser as Parser exposing ((</>), Parser)
 port sendUrlChangedData : String -> Cmd msg
 
 
+port renderPageData : String -> Cmd msg
+
+
 type alias Model =
     { page : Page, key : Nav.Key }
 
@@ -125,7 +128,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         NoOp ->
-            ( model, Cmd.none )
+            ( model, renderPageData "" )
 
         ChangedUrl url ->
             updateUrl url model
@@ -170,7 +173,7 @@ updateUrl url model =
             mapToPageActivity model SVDPage SVDMessages SVD.init
 
         Just HomeR ->
-            ( { model | page = HomePage }, Cmd.none )
+            ( { model | page = HomePage }, renderPageData "" )
 
         Just CosineSimilarityR ->
             mapToPageActivity model CosineSimilarityPage CosineSimilarityMessages CosineSimilarity.init
@@ -179,7 +182,7 @@ updateUrl url model =
             mapToPageActivity model CosineSimilarityPt2Page CosineSimilarityPt2Messages CosineSimilarityPt2.init
 
         Nothing ->
-            ( { model | page = NotFound }, Cmd.none )
+            ( { model | page = NotFound }, renderPageData "" )
 
 
 blog_list_post_component : BlogPostMetaData -> Html msg

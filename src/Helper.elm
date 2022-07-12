@@ -19,6 +19,11 @@ type alias BlogPostMetaData =
     }
 
 
+blog_section : List (Html msg) -> Html msg
+blog_section children =
+    section [] children
+
+
 page_view_template : { a | published_date : String, summary : String } -> Html msg -> Html msg
 page_view_template model children =
     div

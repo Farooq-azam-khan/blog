@@ -2,11 +2,11 @@
   "name": "farooq-azam-khan-blog",
   "scripts": {
     "start": "vite --host 0.0.0.0", 
-    "vite:build": "vite build", 
-    "old_dev": "npm run elm:dev & npm run tailwind:dev",
+    "build": "vite build", 
+    "old:dev": "npm run elm:dev & npm run tailwind:dev",
     "elm:dev": "elm-live src/Main.elm -p 3000 --pushstate -- --output=elm.js --debug",
     "elm:build": "elm make src/Main.elm --output=build/elm.js --optimize",
-    "build": "cp index.html build & cp github*.css build & npm run elm:build && npm run tailwind:build",
+    "old:build": "cp index.html build & cp github*.css build & npm run elm:build && npm run tailwind:build",
     "tailwind:dev": "tailwindcss -i tailwind.css -o build.css --watch",
     "tailwind:build": "tailwindcss -i tailwind.css -o build/build.css --minify"
   },

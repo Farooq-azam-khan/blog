@@ -1,7 +1,9 @@
 {
   "name": "farooq-azam-khan-blog",
   "scripts": {
-    "start": "npm run elm:dev & npm run tailwind:dev",
+    "start": "vite --host 0.0.0.0", 
+    "vite:build": "vite build", 
+    "old_dev": "npm run elm:dev & npm run tailwind:dev",
     "elm:dev": "elm-live src/Main.elm -p 3000 --pushstate -- --output=elm.js --debug",
     "elm:build": "elm make src/Main.elm --output=build/elm.js --optimize",
     "build": "cp index.html build & cp github*.css build & npm run elm:build && npm run tailwind:build",
@@ -14,7 +16,9 @@
     "elm-live": "^4.0.2",
     "elm-review": "^2.5.5",
     "elm-tooling": "^1.4.0",
-    "tailwindcss": "^3.0.17"
+    "tailwindcss": "^3.0.17",
+    "vite": "^2.9.14",
+    "vite-plugin-elm": "^2.6.1"
   },
   "dependencies": {
     "highlight.js": "^11.5.1"

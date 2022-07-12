@@ -22,8 +22,6 @@
 
 
     <!-- CUSTOM CODE IMPORTS --> 
-    <link rel="stylesheet" href="/build.css" />
-    <script src="/elm.js"></script>
     <title>Farooq Azam Khan | Blog</title>
   </head>
   <body>
@@ -31,54 +29,8 @@
 <noscript>
         You need to enable JavaScript to run this app.
     </noscript>
+    <script type="module" src="/index.ts"></script>
     <!-- Run the app + render LaTeX using KaTeX (note the seperate script tags!) -->
-    <script>
-        const app = Elm.Main.init({
-          node: document.getElementById('app')
-        })
-      // render the math formulas when the url changes
-      app.ports.sendUrlChangedData.subscribe((data) => {
-        console.log('changed url...')
-        renderPageOnLoad()
-      })
-      renderPageOnLoad()
-      function renderPageOnLoad() {
-        console.log('rendering page content')
-        renderMathInElement(document.body, {
-              delimiters: [
-                {
-                  left: "$begin-inline$", 
-                  right: "$end-inline$", 
-                  display: false
-                }, 
-                {
-                  left: "$begin-display$",
-                  right: "$end-display$", 
-                  display: true
-                }]
-        });
 
-        console.log('highlighting text')
-        document.querySelectorAll('pre code').forEach(block => hljs.highlightBlock(block))
-
-      }
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-          delimiters: [
-            {
-              left: "$begin-inline$", 
-              right: "$end-inline$", 
-              display: false
-            }, 
-            {
-              left: "$begin-display$",
-              right: "$end-display$", 
-              display: true
-            }]});
-        });
-    </script>
   </body>
 </html>

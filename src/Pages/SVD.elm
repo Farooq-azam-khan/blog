@@ -1,5 +1,6 @@
 module Pages.SVD exposing (..)
 
+import Helper exposing (BlogDevelopmentStep(..), BlogPostMetaData, PulicationDate(..), page_view_template)
 import Html exposing (..)
 import Katex as K
     exposing
@@ -10,28 +11,13 @@ import Katex as K
         )
 
 
-passage : List Latex
-passage =
-    [ human "The formula for Singular Value Decomposition is"
-    , display "A = USV^T"
-    , human "where "
-    , inline "A"
-    , human ", "
-    , inline "U"
-    , human ", "
-    , inline "S"
-    , human ", "
-    , inline "V"
-    , human "are matricies."
-    ]
-
-
 
 -- if it is a draft, then show title but, link is not clickable and is greyed out
 
 
 type alias Model =
-    { title : String, date_added : String, is_draft : Bool }
+    { meta_data : BlogPostMetaData
+    }
 
 
 type Msg
@@ -58,11 +44,38 @@ view model =
                 _ ->
                     span [] [ text stringLatex ]
     in
-    passage
-        |> List.map (K.generate htmlGenerator)
-        |> div []
+    page_view_template model.meta_data <|
+        (passage
+            |> List.map (K.generate htmlGenerator)
+            |> div []
+        )
+
+
+passage : List Latex
+passage =
+    [ human "The formula for Singular Value Decomposition is"
+    , display "A = USV^T"
+    , human "where "
+    , inline "A"
+    , human ", "
+    , inline "U"
+    , human ", "
+    , inline "S"
+    , human ", "
+    , inline "V"
+    , human "are matricies."
+    ]
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { is_draft = True, title = "Singular Value Decomposition", date_added = "TBD" }, Cmd.none )
+    ( { meta_data =
+            { title = "Singular Value Decomposition"
+            , published_date = InDevelopment
+            , summary = "TBD"
+            , post_link = "svd"
+            , developmentStep = Draft "1.0"
+            }
+      }
+    , Cmd.none
+    )

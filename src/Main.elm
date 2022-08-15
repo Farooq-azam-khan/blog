@@ -2,12 +2,13 @@ port module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Helper exposing (BlogPostMetaData)
+import Helper exposing (BlogPostMetaData, display_publication_data)
 import Html exposing (..)
 import Html.Attributes exposing (alt, class, href, src, target)
 import Pages.CosineSimilarity as CosineSimilarity
 import Pages.CosineSimilarityPt2 as CosineSimilarityPt2
 import Pages.SVD as SVD
+import Pages.TFIDF as Tfidf
 import Url exposing (Url)
 import Url.Parser as Parser exposing ((</>), Parser)
 
@@ -32,14 +33,16 @@ type Route
     | SVDRoute
     | CosineSimilarityR
     | CosineSimilarityPt2R
+    | TfidfR
 
 
 type Page
-    = SVDPage SVD.Model
+    = HomePage
+    | SVDPage SVD.Model
+    | NotFound
     | CosineSimilarityPage CosineSimilarity.Model
     | CosineSimilarityPt2Page CosineSimilarityPt2.Model
-    | HomePage
-    | NotFound
+    | TfidfPage Tfidf.Model
 
 
 type Msg
@@ -49,21 +52,24 @@ type Msg
     | SVDMessages SVD.Msg
     | CosineSimilarityMessages CosineSimilarity.Msg
     | CosineSimilarityPt2Messages CosineSimilarityPt2.Msg
+    | TfidfMessages Tfidf.Msg
 
 
 parser : Parser (Route -> a) a
 parser =
     Parser.oneOf
         [ Parser.map HomeR Parser.top
-        , Parser.map SVDRoute (Parser.s "svd")
+        , parse_blog_page_post_link SVDRoute <| get_model_meta_data SVD.init
         , parse_blog_page_post_link CosineSimilarityR <| get_model_meta_data CosineSimilarity.init
         , parse_blog_page_post_link CosineSimilarityPt2R <| get_model_meta_data CosineSimilarityPt2.init
+        , parse_blog_page_post_link TfidfR <| get_model_meta_data Tfidf.init
         ]
 
 
 blog_posts_lists : List BlogPostMetaData
 blog_posts_lists =
-    [ (Tuple.first CosineSimilarityPt2.init).meta_data
+    [ (Tuple.first Tfidf.init).meta_data
+    , (Tuple.first CosineSimilarityPt2.init).meta_data
     , (Tuple.first CosineSimilarity.init).meta_data
     ]
 
@@ -73,7 +79,7 @@ page_content_view model =
     case model.page of
         SVDPage svd_model ->
             ( "svd"
-            , svd_model.title
+            , svd_model.meta_data.title
             , SVD.view svd_model |> Html.map SVDMessages
             )
 
@@ -96,6 +102,12 @@ page_content_view model =
             ( "Not Found"
             , "Page Not Found"
             , div [] [ text "url not found" ]
+            )
+
+        TfidfPage tfidf_model ->
+            ( "tfidf-page"
+            , tfidf_model.meta_data.title
+            , Tfidf.view tfidf_model |> Html.map TfidfMessages
             )
 
 
@@ -165,6 +177,14 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        TfidfMessages tfidf_messages ->
+            case model.page of
+                TfidfPage tfidf_model ->
+                    mapToPageActivity model TfidfPage TfidfMessages (Tfidf.update tfidf_messages tfidf_model)
+
+                _ ->
+                    ( model, Cmd.none )
+
 
 updateUrl : Url -> Model -> ( Model, Cmd Msg )
 updateUrl url model =
@@ -181,6 +201,9 @@ updateUrl url model =
         Just CosineSimilarityPt2R ->
             mapToPageActivity model CosineSimilarityPt2Page CosineSimilarityPt2Messages CosineSimilarityPt2.init
 
+        Just TfidfR ->
+            mapToPageActivity model TfidfPage TfidfMessages Tfidf.init
+
         Nothing ->
             ( { model | page = NotFound }, renderPageData "" )
 
@@ -189,7 +212,7 @@ blog_list_post_component : BlogPostMetaData -> Html msg
 blog_list_post_component blog_data =
     div
         [ class "hover:bg-orange-100 py-2 rounded hover:rounded-lg ease-in duration-200 border-l-4  border-white hover:border-indigo-400 px-3 flex flex-col space-y-2" ]
-        [ span [ class "text-indigo-600 " ] [ text blog_data.published_date ]
+        [ span [ class "text-indigo-600 " ] [ text <| display_publication_data blog_data.published_date ]
         , span [ class "mt-3" ]
             [ a
                 [ href blog_data.post_link ]

@@ -2,7 +2,9 @@ module Pages.CosineSimilarity exposing (..)
 
 import Helper
     exposing
-        ( BlogPostMetaData
+        ( BlogDevelopmentStep(..)
+        , BlogPostMetaData
+        , PulicationDate(..)
         , compile_latex_code
         , page_view_template
         )
@@ -32,9 +34,10 @@ init : ( Model, Cmd Msg )
 init =
     ( { meta_data =
             { title = "Comparing Vectors with Cosine Simlarity Function"
-            , published_date = "July 4th, 2022"
+            , published_date = Publised { month = "July", date = "4th", year = 2022 }
             , summary = "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
             , post_link = "cosine-similarity"
+            , developmentStep = BlogReady
             }
       }
     , Cmd.none

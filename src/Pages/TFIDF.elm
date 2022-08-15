@@ -158,11 +158,13 @@ Sentence
                 [ text """from sklearn.feature_extraction.text import TfidfVectorizer
 vectorizer = TfidfVectorizer()
 print(create_doc_term_df(text_data, vectorizer).to_string())
+'''output
                big     brown     cried       fox   giraffe     quick      that      the     whale
 Sentence                                                                                         
 0         0.707107  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000  0.00000  0.707107
 1         0.000000  0.528635  0.000000  0.528635  0.000000  0.528635  0.000000  0.40204  0.000000
 2         0.000000  0.000000  0.528635  0.000000  0.528635  0.000000  0.528635  0.40204  0.000000
+'''
 """
                 ]
             ]

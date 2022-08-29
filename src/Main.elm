@@ -9,6 +9,7 @@ import Pages.CosineSimilarity as CosineSimilarity
 import Pages.CosineSimilarityPt2 as CosineSimilarityPt2
 import Pages.SVD as SVD
 import Pages.TFIDF as Tfidf
+import Pages.TextTokenization as TextTokenization
 import Url exposing (Url)
 import Url.Parser as Parser exposing ((</>), Parser)
 
@@ -34,6 +35,7 @@ type Route
     | CosineSimilarityR
     | CosineSimilarityPt2R
     | TfidfR
+    | TextTokenizationR
 
 
 type Page
@@ -43,6 +45,7 @@ type Page
     | CosineSimilarityPage CosineSimilarity.Model
     | CosineSimilarityPt2Page CosineSimilarityPt2.Model
     | TfidfPage Tfidf.Model
+    | TextTokenizationPage TextTokenization.Model
 
 
 type Msg
@@ -53,6 +56,7 @@ type Msg
     | CosineSimilarityMessages CosineSimilarity.Msg
     | CosineSimilarityPt2Messages CosineSimilarityPt2.Msg
     | TfidfMessages Tfidf.Msg
+    | TextTokenizationMessages TextTokenization.Msg
 
 
 parser : Parser (Route -> a) a
@@ -63,12 +67,14 @@ parser =
         , parse_blog_page_post_link CosineSimilarityR <| get_model_meta_data CosineSimilarity.init
         , parse_blog_page_post_link CosineSimilarityPt2R <| get_model_meta_data CosineSimilarityPt2.init
         , parse_blog_page_post_link TfidfR <| get_model_meta_data Tfidf.init
+        , parse_blog_page_post_link TextTokenizationR <| get_model_meta_data TextTokenization.init
         ]
 
 
 blog_posts_lists : List BlogPostMetaData
 blog_posts_lists =
-    [ (Tuple.first Tfidf.init).meta_data
+    [ (Tuple.first TextTokenization.init).meta_data
+    , (Tuple.first Tfidf.init).meta_data
     , (Tuple.first CosineSimilarityPt2.init).meta_data
     , (Tuple.first CosineSimilarity.init).meta_data
     ]
@@ -108,6 +114,12 @@ page_content_view model =
             ( "tfidf-page"
             , tfidf_model.meta_data.title
             , Tfidf.view tfidf_model |> Html.map TfidfMessages
+            )
+
+        TextTokenizationPage text_token_model ->
+            ( "text-tokenization"
+            , text_token_model.meta_data.title
+            , TextTokenization.view text_token_model |> Html.map TextTokenizationMessages
             )
 
 
@@ -185,6 +197,14 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        TextTokenizationMessages tt_msgs ->
+            case model.page of
+                TextTokenizationPage tt_model ->
+                    mapToPageActivity model TextTokenizationPage TextTokenizationMessages (TextTokenization.update tt_msgs tt_model)
+
+                _ ->
+                    ( model, Cmd.none )
+
 
 updateUrl : Url -> Model -> ( Model, Cmd Msg )
 updateUrl url model =
@@ -203,6 +223,9 @@ updateUrl url model =
 
         Just TfidfR ->
             mapToPageActivity model TfidfPage TfidfMessages Tfidf.init
+
+        Just TextTokenizationR ->
+            mapToPageActivity model TextTokenizationPage TextTokenizationMessages TextTokenization.init
 
         Nothing ->
             ( { model | page = NotFound }, renderPageData "" )

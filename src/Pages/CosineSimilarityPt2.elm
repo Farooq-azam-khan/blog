@@ -1,6 +1,6 @@
 module Pages.CosineSimilarityPt2 exposing (..)
 
-import Helper exposing (BlogPostMetaData, blog_section, page_view_template)
+import Helper exposing (BlogDevelopmentStep(..), BlogPostMetaData, PulicationDate(..), blog_section, page_view_template)
 import Html exposing (..)
 import Html.Attributes exposing (class, href, target)
 import Katex as K
@@ -20,9 +20,10 @@ init : ( Model, Cmd Msg )
 init =
     ( { meta_data =
             { title = "Large Scale Vector Comparison"
-            , published_date = "July 9th, 2022"
+            , published_date = Publised { month = "July", date = "9th", year = 2022 }
             , summary = "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs. The purpose of is to look at a real dataset."
             , post_link = "cosine-similarity-pt2"
+            , developmentStep = BlogReady
             }
       }
     , Cmd.none

@@ -1,8 +1,11 @@
 {
   "name": "farooq-azam-khan-blog",
   "scripts": {
-    "start": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "postinstall": "elm-tooling install",
+    "start": "elm-pages dev",
+    "build": "elm-pages build",
+    "vite:start": "vite --host 0.0.0.0",
+    "vite:build": "vite build",
     "old:dev": "npm run elm:dev & npm run tailwind:dev",
     "elm:dev": "elm-live src/Main.elm -p 3000 --pushstate -- --output=elm.js --debug",
     "elm:build": "elm make src/Main.elm --output=build/elm.js --optimize",

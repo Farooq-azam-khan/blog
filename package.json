@@ -1,29 +1,39 @@
 {
-  "name": "farooq-azam-khan-blog",
+  "name": "next-app-tut",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "vite --host 0.0.0.0",
-    "build": "vite build",
-    "old:dev": "npm run elm:dev & npm run tailwind:dev",
-    "elm:dev": "elm-live src/Main.elm -p 3000 --pushstate -- --output=elm.js --debug",
-    "elm:build": "elm make src/Main.elm --output=build/elm.js --optimize",
-    "old:build": "cp index.html build & cp github*.css build & npm run elm:build && npm run tailwind:build",
-    "tailwind:dev": "tailwindcss -i tailwind.css -o build.css --watch",
-    "tailwind:build": "tailwindcss -i tailwind.css -o build/build.css --minify"
-  },
-  "devDependencies": {
-    "@tailwindcss/typography": "^0.5.1",
-    "autoprefixer": "^10.4.7",
-    "elm": "^0.19.1-5",
-    "elm-live": "^4.0.2",
-    "elm-review": "^2.5.5",
-    "elm-tooling": "^1.4.0",
-    "postcss": "^8.4.14",
-    "tailwindcss": "^3.0.17",
-    "vite": "^2.9.14",
-    "vite-plugin-elm": "^2.6.1", 
-    "typescript": "^4.7.4"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "highlight.js": "^11.5.1"
+    "@mdx-js/loader": "^2.1.3",
+    "@mdx-js/react": "*\n",
+    "@next/mdx": "^12.2.5",
+    "@types/react-copy-to-clipboard": "^5.0.4",
+    "@types/react-syntax-highlighter": "^15.5.5",
+    "install": "^0.13.0",
+    "next": "12.2.5",
+    "prop-types": "^15.8.1",
+    "react": "18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "18.2.0",
+    "react-katex": "^3.0.1",
+    "react-syntax-highlighter": "^15.5.0",
+    "webpack": "^5.74.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.7",
+    "@types/node": "18.7.14",
+    "@types/react": "18.0.18",
+    "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.8",
+    "eslint": "8.23.0",
+    "eslint-config-next": "12.2.5",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8",
+    "typescript": "4.8.2"
   }
 }

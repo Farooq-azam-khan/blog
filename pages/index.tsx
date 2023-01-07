@@ -1,6 +1,4 @@
 import type { NextPage } from 'next'
-import { meta as cos_meta } from './cosine-similarity.mdx'
-import { meta as cos_pt2_meta } from './cosine-similarity-pt-2.mdx'
 
 type BlogDate = {
   month: string, year: number, date: string
@@ -12,6 +10,19 @@ type BlogMetaData = {
   published_date: BlogDate
 }
 
+export const cos_meta = {
+  title: "Comparing Vectors with Cosine Simlarity Function",
+  published_date: { month: "July", date: "4th", year: 2022 }
+  , summary: "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
+  , post_link: "cosine-similarity"
+}
+
+export const cos_pt2_meta = {
+  title: "Large Scale Vector Comparison",
+  published_date: { month: "July", date: "9th", year: 2022 }
+  , summary: "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs. The purpose of is to look at a real dataset."
+  , post_link: "cosine-similarity-pt-2"
+}
 
 const BlogPostListView = ({ meta_data }: { meta_data: BlogMetaData }) => {
   const display_str = display_publication_date(meta_data.published_date)

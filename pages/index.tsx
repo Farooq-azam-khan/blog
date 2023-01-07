@@ -51,7 +51,6 @@ const Home: NextPage = () => {
           <li>What RNNs are and why they are Turing Complete!</li>
         </ul>
       </section>
-
     </div>
   )
 }

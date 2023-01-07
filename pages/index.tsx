@@ -1,9 +1,34 @@
 import type { NextPage } from 'next'
-import Link from 'next/link'
+import { meta as cos_meta } from './cosine-similarity.mdx'
+import { meta as cos_pt2_meta } from './cosine-similarity-pt-2.mdx'
 
+type BlogDate = {
+  month: string, year: number, date: string
+}
+type BlogMetaData = {
+  title: string,
+  summary: string,
+  post_link: string,
+  published_date: BlogDate
+}
+
+
+const BlogPostListView = ({ meta_data }: { meta_data: BlogMetaData }) => {
+  const display_str = display_publication_date(meta_data.published_date)
+  return (<div className='hover:bg-orange-100 py-2 rounded hover:rounded-lg ease-in duration-200 border-l-4  border-white hover:border-indigo-400 px-3 flex flex-col space-y-2'>
+    <span className='text-indigo-600'> {display_str}
+    </span>
+    <span className='mt-3'>
+      <a href={meta_data.post_link}>
+        {meta_data.title}
+      </a>
+    </span>
+    <span className="text-gray-700">{meta_data.summary}</span>
+  </div>)
+}
 const Home: NextPage = () => {
   return (
-    <div className="sm:mx-0 mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10">
+    <div className="sm:mx-0 md:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10">
       <div className='sm:flex sm:items-center space-x-3'>
         <a
           target="blank"
@@ -12,7 +37,9 @@ const Home: NextPage = () => {
         <h1 className="text-3xl font-bold underline">Farooq Azam Khan</h1>
       </div>
       <section className="space-y-2">
-        Blog List goes here
+        <BlogPostListView meta_data={cos_pt2_meta} />
+        <BlogPostListView meta_data={cos_meta} />
+
       </section>
       <section>
         <h2 className='text-gray-700'>Drafts</h2>
@@ -27,6 +54,10 @@ const Home: NextPage = () => {
 
     </div>
   )
+}
+
+function display_publication_date(pub_date: BlogDate) {
+  return pub_date.month + " " + pub_date.date + ", " + pub_date.year;
 }
 
 export default Home

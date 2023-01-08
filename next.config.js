@@ -1,7 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
+  // Append the default value with md extensions
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    remotePatterns: [{
+      protocol: 'https',
+      hostname: 'avatars.githubusercontent.com',
+      port: '',
+      pathname: '/u/**',
+    }]
+  }
 }
 
 // next.config.js
@@ -15,12 +26,6 @@ const withMDX = require('@next/mdx')({
     providerImportSource: "@mdx-js/react",
   }
 })
-module.exports = withMDX({
-
-  // Append the default value with md extensions
-  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-  reactStrictMode: nextConfig.reactStrictMode,
-  swcMinify: nextConfig.swcMinify
-})
+module.exports = withMDX(nextConfig)
 
 

@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import Image from 'next/image'
 
 type BlogDate = {
   month: string, year: number, date: string
@@ -80,7 +81,9 @@ const Home: NextPage = () => {
         <a
           target="blank"
           href='https://www.github.com/farooq-azam-khan'>
-          <img className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" /></a>
+          {/* <Image className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" layout="fill" /> */}
+          <img className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" />
+        </a>
         <h1 className="text-3xl font-bold underline">Farooq Azam Khan</h1>
       </div>
       <section className="space-y-2">

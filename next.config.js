@@ -6,7 +6,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    formats: ['images/jpeg'],
+    formats:  ["image/avif", "image/webp"],
     remotePatterns: [{
       protocol: 'https',
       hostname: 'avatars.githubusercontent.com',
@@ -23,6 +23,7 @@ const withMDX = require('@next/mdx')({
   options: {
     remarkPlugins: [],
     rehypePlugins: [],
+    // mdxRs: true, // experimental rust based compiler
     // If you use `MDXProvider`, uncomment the following line.
     providerImportSource: "@mdx-js/react",
   }

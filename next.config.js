@@ -6,6 +6,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
+    formats: ['images/jpeg'],
     remotePatterns: [{
       protocol: 'https',
       hostname: 'avatars.githubusercontent.com',

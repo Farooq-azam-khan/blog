@@ -83,7 +83,12 @@ const Home: NextPage = () => {
         <a
           target="blank"
           href='https://www.github.com/farooq-azam-khan'>
-          <Image className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" layout="fill" />
+          <Image 
+            className='rounded-full w-32 h-32' 
+            alt="image of Farooq Azam Khan" 
+            src="https://avatars.githubusercontent.com/u/33574913?v=4" 
+            layout="fill" 
+          />
           {/* <img className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" /> */}
         </a>
         <h1 className="text-3xl font-bold underline">Farooq Azam Khan</h1>

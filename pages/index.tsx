@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
-import Image from 'next/image'
-import {meta as cos_meta} from './cosine-similarity.mdx'
-import {meta as tech_stack} from './tech-stack.mdx'
+import Navbar from '../components/Navbar'
+
+// import {meta as tech_stack} from '/home/farooq-azam-khan/Documents/dev/blog/pages/cosine-similarity.mdx'
 type BlogDate = {
   month: string, year: number, date: string
 }
@@ -13,12 +13,12 @@ type BlogMetaData = {
 }
 
 
-// export const cos_meta = {
-//   title: "Comparing Vectors with Cosine Simlarity Function",
-//   published_date: { month: "July", date: "4th", year: 2022 }
-//   , summary: "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
-//   , post_link: "cosine-similarity"
-// }
+export const cos_meta = {
+  title: "Comparing Vectors with Cosine Simlarity Function",
+  published_date: { month: "July", date: "4th", year: 2022 }
+  , summary: "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
+  , post_link: "cosine-similarity"
+}
 
 export const cos_pt2_meta = {
   title: "Large Scale Vector Comparison",
@@ -34,6 +34,12 @@ export const tfidf_meta = {
   , post_link: "tfidf"
 }
 
+export const tech_stack_meta = {
+  title : "Tech stack for rapid prototyping applications", 
+  published_date : { month : "June", date : "3rd", year : 2023 }
+  , summary : "In this blog I will focus on the ways in which I set up a backend and frontend to do rapid prototyping of full stack applications."
+  , post_link : "tech-stack"
+}
 
 const BlogPostView = ({ meta_data }: { meta_data: BlogMetaData }) => {
   const display_str = display_publication_date(meta_data.published_date)
@@ -76,28 +82,17 @@ function BlogPostListView({ blogs }: { blogs: BlogMetaData[] }) {
   </>)
 
 }
+
+
 const Home: NextPage = () => {
   return (
     <div className="sm:mx-0 md:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10">
-      <div className='sm:flex sm:items-center space-x-3'>
-        <a
-          target="blank"
-          href='https://www.github.com/farooq-azam-khan'>
-          <Image 
-            className='rounded-full w-32 h-32' 
-            alt="image of Farooq Azam Khan" 
-            src="https://avatars.githubusercontent.com/u/33574913?v=4" 
-            layout="fill" 
-          />
-          {/* <img className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" /> */}
-        </a>
-        <h1 className="text-3xl font-bold underline">Farooq Azam Khan</h1>
-      </div>
+      <Navbar />
       <section className="space-y-2">
         <BlogPostListView blogs={[cos_pt2_meta, 
           cos_meta, 
           tfidf_meta, 
-          tech_stack
+          tech_stack_meta
           ]} />
 
       </section>

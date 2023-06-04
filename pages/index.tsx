@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
-
+import {meta as cos_meta} from './cosine-similarity.mdx'
+import {meta as tech_stack} from './tech-stack.mdx'
 type BlogDate = {
   month: string, year: number, date: string
 }
@@ -11,12 +12,13 @@ type BlogMetaData = {
   published_date: BlogDate
 }
 
-export const cos_meta = {
-  title: "Comparing Vectors with Cosine Simlarity Function",
-  published_date: { month: "July", date: "4th", year: 2022 }
-  , summary: "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
-  , post_link: "cosine-similarity"
-}
+
+// export const cos_meta = {
+//   title: "Comparing Vectors with Cosine Simlarity Function",
+//   published_date: { month: "July", date: "4th", year: 2022 }
+//   , summary: "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
+//   , post_link: "cosine-similarity"
+// }
 
 export const cos_pt2_meta = {
   title: "Large Scale Vector Comparison",
@@ -81,13 +83,17 @@ const Home: NextPage = () => {
         <a
           target="blank"
           href='https://www.github.com/farooq-azam-khan'>
-          {/* <Image className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" layout="fill" /> */}
-          <img className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" />
+          <Image className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" layout="fill" />
+          {/* <img className='rounded-full w-32 h-32' alt="image of Farooq Azam Khan" src="https://avatars.githubusercontent.com/u/33574913?v=4" /> */}
         </a>
         <h1 className="text-3xl font-bold underline">Farooq Azam Khan</h1>
       </div>
       <section className="space-y-2">
-        <BlogPostListView blogs={[cos_pt2_meta, cos_meta, tfidf_meta]} />
+        <BlogPostListView blogs={[cos_pt2_meta, 
+          cos_meta, 
+          tfidf_meta, 
+          tech_stack
+          ]} />
 
       </section>
       <section>

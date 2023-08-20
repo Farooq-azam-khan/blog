@@ -1,4 +1,4 @@
-import SyntaxHighlighter from 'react-syntax-highlighter'
+import SyntaxHighlighter from 'react-syntax-highlighter';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const CodeBlock = ({ children }: any) => {
@@ -14,4 +14,6 @@ const CodeBlock = ({ children }: any) => {
     </div>)
 }
 
-export default CodeBlock 
+
+
+export default CodeBlock;

@@ -1,12 +1,52 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
-import { meta as cos_meta } from "./cosine-similarity.mdx";
-import { meta as cos_pt2_meta } from "./cosine-similarity-pt-2.mdx";
-import { meta as tfidf_meta } from "./tfidf.mdx";
-import { meta as tech_stack_meta } from "./tech-stack.mdx";
-import { meta as d3_meta } from "./d3-tutorial.mdx";
-import { meta as fli_meta } from "./fast-llm-inferencing.mdx";
 
+// TODO: dynamically render meta data
+const blog_metadata: any[] = [
+  {
+    title: "Term Frequency-Inverse Document Frequency",
+    published_date: { month: "August", date: "1th", year: 2022 },
+    summary:
+      "In this tutorial we will look at what TF and IDF are and how they can be use to process text data in Machine learning.",
+    post_link: "tfidf",
+  },
+  {
+    title: "Tech stack for rapid prototyping applications",
+    published_date: { month: "June", date: "3rd", year: 2023 },
+    summary:
+      "In this blog I will focus on the ways in which I set up a backend and frontend to do rapid prototyping of full stack applications.",
+    post_link: "tech-stack",
+  },
+  {
+    title: "Scaling LLMs with Triton Inference Server: A Hands-on Guide",
+    published_date: { month: "November", date: "11th", year: 2024 },
+    summary:
+      "Get hands-on experience with deploying Large Language Models (LLMs) at scale using NVIDIA's Triton Inference Server. ",
+    post_link: "fast-llm-inferencing",
+  },
+  {
+    title: "Large Scale Vector Comparison",
+    published_date: { month: "July", date: "9th", year: 2022 },
+    summary:
+      "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs. The purpose of is to look at a real dataset.",
+    post_link: "cosine-similarity-pt-2",
+  },
+  {
+    title: "Comparing Vectors with Cosine Simlarity Function",
+    published_date: { month: "July", date: "4th", year: 2022 },
+    summary:
+      "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python.",
+    post_link: "cosine-similarity",
+  },
+  {
+    title: "D3 Tutorial",
+    published_date: { month: "December", date: "24th", year: 2019 },
+    summary:
+      "In this post, I outline the ways in which d3 library works with the <svg> elements.",
+    post_link: "d3-tutorial",
+    /* TODO: migrate d3 tutorial here  */
+  },
+];
 type BlogDate = {
   month: string;
   year: number;
@@ -69,16 +109,7 @@ const Home: NextPage = () => {
     <div className=" sm:mx-0 md:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10 mb-20">
       <Navbar />
       <section className="space-y-2">
-        <BlogPostListView
-          blogs={[
-            fli_meta,
-            cos_pt2_meta,
-            cos_meta,
-            tfidf_meta,
-            tech_stack_meta,
-            d3_meta,
-          ]}
-        />
+        <BlogPostListView blogs={blog_metadata} />
       </section>
       {/* <section>
         <h2 className='text-gray-700'>Drafts</h2>

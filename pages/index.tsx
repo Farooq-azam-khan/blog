@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
-import { meta as fli_meta } from "./fast-llm-inferencing.mdx";
 import { meta as cos_meta } from "./cosine-similarity.mdx";
 import { meta as cos_pt2_meta } from "./cosine-similarity-pt-2.mdx";
 import { meta as tfidf_meta } from "./tfidf.mdx";
 import { meta as tech_stack_meta } from "./tech-stack.mdx";
 import { meta as d3_meta } from "./d3-tutorial.mdx";
+import { meta as fli_meta } from "./fast-llm-inferencing.mdx";
 
 type BlogDate = {
   month: string;

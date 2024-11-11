@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Navbar: NextPage = () => {
   return (
-    <div className="sm:flex sm:items-center space-x-3">
+    <div className="sm:flex sm:items-center space-x-3 sm:space-x-5 ">
       <a target="blank" href="https://www.github.com/farooq-azam-khan">
         <Image
           className="rounded-full"
@@ -15,9 +15,7 @@ const Navbar: NextPage = () => {
         />
       </a>
       <Link href="/">
-        <h1 className="text-3xl font-bold underline">
-          <span>Farooq</span> <span>Azam</span> <span>Khan</span>
-        </h1>
+        <h2 className="text-5xl font-bold underline">Farooq A. Khan</h2>
       </Link>
     </div>
   );

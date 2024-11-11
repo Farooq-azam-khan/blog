@@ -1,5 +1,4 @@
 import Layout from "../components/Layout.tsx";
-import CodeBlock from "../components/CodeBlock.tsx";
 import { InlineMath, BlockMath } from "react-katex";
 
 export const meta = {
@@ -22,25 +21,32 @@ Poetry is a dependency manager and build tool for Python. It simplifies the proc
 
 1. First, install Poetry by running the following command:
 
-<CodeBlock>
-  {`curl -sSL https://install.python-poetry.org | python3 -`}
-</CodeBlock>
+```bash 
+curl -sSL https://install.python-poetry.org | python3 -
+```
 Any subsequent information about poetry can be retrieved from [here](https://python-poetry.org/docs/).
 
 2. Add the necessary dependencies for FastAPI by running the following command:
 
-   <CodeBlock>{`poetry add fastapi uvicorn jinja2`}</CodeBlock>
+```bash 
+poetry add fastapi uvicorn jinja2
+```
 
 3. Create a new file called `main.py` and add the following code:
-   {" "}
-   <CodeBlock>{`from fastapi import FastAPI\napp = FastAPI()\n@app.get("/")\nasync def home_api():\n\treturn "Hello world"`}</CodeBlock>
-   {/* Line below needs to be empty */}
+```python 
+from fastapi import FastAPI
+app = FastAPI()
+@app.get("/")
+async def home_api():
+   return "Hello world"
+```
 
 This code sets up a basic FastAPI application. Note how the default response for fastapi is json.
 
 4. Finally, start the server by running the following command:
-   {" "}
-   <CodeBlock>{`poetry run uvicorn main:app --reload`}</CodeBlock>
+```python 
+poetry run uvicorn main:app --reload
+```
    This command will start the Uvicorn server and reload the server whenever changes
    are made to the code.
 

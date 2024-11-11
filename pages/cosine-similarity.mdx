@@ -1,5 +1,4 @@
 import Layout from '../components/Layout.tsx'
-import CodeBlock from '../components/CodeBlock.tsx'
 import { InlineMath, BlockMath } from 'react-katex'
 
 export const meta = { 
@@ -39,8 +38,8 @@ The similarity between the two vectors is
 
 We will use a pretrained deep learning model to generate vector representations of sentenes in an attempt to find similarities between sentences using the cosine similarity function.
 
-<CodeBlock>
-{`from sentence_transformers import SentenceTransformer
+```python 
+from sentence_transformers import SentenceTransformer
 # The Deep Learning model that will give us the vector representation
 model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 # The two sentences we want to compare
@@ -53,8 +52,7 @@ mag_s1 = np.sqrt(np.sum(np.square(s1_encoding)))
 mag_s2 = np.sqrt(np.sum(np.square(s2_encoding)))
 np.dot(s1_encoding, s2_encoding) / (mag_s1 * mag_s2)
 # Output: 0.8754566
-`}
-</CodeBlock>
+```
 
 The above example imports the stentence transformers library (`pip install sentence-transformers`). 
 
@@ -65,8 +63,8 @@ Note that the similarity score will differ depending on the model we select; how
 # Large Scale Solution
 Suppose you have a list of documents (could be tens of thoushands) and you would like to compare all of them against each other. It would be very simple to get the vector encodings and do an element wise compairson. Below is the code; however, it is slow and redundant.
 
-<CodeBlock>
-{`def get_cosine_similarity(arr1, arr2):
+```python 
+def get_cosine_similarity(arr1, arr2):
     numerator = np.dot(arr1, arr2)
     mag1 = np.sqrt(np.sum(np.square(arr1)))
     mag2 = np.sqrt(np.sum(np.square(arr2)))
@@ -82,8 +80,7 @@ def get_document_similarities(model, documents: List[str]):
                 sim = get_cosine_similarity(doc1_enc, doc2_enc)
                 similarities[i][j] = sim
     return similarities
-`}
-</CodeBlock>
+```
 
 The complexity of the above algorithm is <InlineMath math="O(n^2)"/> in terms of calculating the vector encodings for each document, assuming calculating the encodings and the cosine similarity is constant time complexity.
 
@@ -95,8 +92,8 @@ Although we cannot get past the <InlineMath math="O(n^2)" /> limit set on our ti
 Cosine simlarity is order independent, i.e. `similarity(doc1, doc2) = similarity(doc2, doc1)`.
 
 So if you have <InlineMath math="n" /> documents, you do not want to compare against itself either. Thus the number computations reduce by <InlineMath math="\frac{1}{2}" />. It becomes:  <InlineMath math="(n^2-1) / 2"/>. 
-<CodeBlock>
-{`def get_document_similarities(model, documents: List[str]):
+```python 
+def get_document_similarities(model, documents: List[str]):
     similarities = [[0 for _ in range(len(documents))]
                     for _ in range((len(documents)))]
     for i, doc1 in enumerate(documents):
@@ -112,8 +109,8 @@ So if you have <InlineMath math="n" /> documents, you do not want to compare aga
             elif i<j:
                 continue
     return similarities
-`}
-</CodeBlock>
+```
+
 Problems,
 * Redundant document encoding can be fixed with a hashmap
 * Does not leverage fast C libraries for fast operations. Can be fixed with numpy arrays and matrix manipulation
@@ -185,8 +182,8 @@ The computation of <InlineMath math="b \\cdot b^T" /> is the resulting matrix fo
 Finally the resulting similarity matrix is the element wise multiplication of our <InlineMath math="A" /> matrix and our reciprocal <InlineMath math="\frac{1}{B}" /> matrix.
 <BlockMath math="S = A \circledast \frac{1}{B}"/>
 Cosine similarity of all sentences. Loose redundancy and repetition; however, when performing matrix batch operations (which have been heavily optimized) is much faster.
-<CodeBlock>
-{`def cosine_similarity_faster(model, documents: List[str]):
+```python 
+def cosine_similarity_faster(model, documents: List[str]):
     document_encodings = np.array([model.encode(doc) for doc in documents])
     numerator = np.matmul(document_encodings, document_encodings.T)
     row_sum = np.sqrt(np.sum(np.square(document_encodings), axis=1, keepdims=True))
@@ -200,8 +197,8 @@ cosine_similarity_faster(model,
 '''
 array([[1.0000004 , 0.87545466],
        [0.87545466, 1.0000004 ]], dtype=float32)
-'''`}
-</CodeBlock>
+'''
+```
 
 ## Make it Faster Part 3
 In an upcoming blog, we will look at making the above algorithm much faster, and use a real life dataset to show how powerful this implementation is.

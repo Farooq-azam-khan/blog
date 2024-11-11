@@ -1,5 +1,4 @@
 import Layout from '../components/Layout.tsx'
-import CodeBlock from '../components/CodeBlock.tsx'
 import { InlineMath, BlockMath } from 'react-katex';
 
 export const meta = { 
@@ -14,23 +13,25 @@ export const meta = {
 Unlike with traditional supervised Machine Learning (ML) problems the challenge with dealing with text data is that it is hard to figure out how to deal with it. Computers do not know how to deal with text data. We have come up with a standard of representing numbers in the form of ASCII, Latin, or UTF-8 encodings. Similarily our ML models will have some sort of encodings that we need it to know about. Dealing with text in the ML pipeline is reffered to as the preprocessing step.
 
 Lets say we have a list of sentences
-<CodeBlock>
-{`text_data  = ['A big Whale.', 
+```python 
+text_data  = ['A big Whale.', 
             'The quick brown fox.',
-            'The Giraffe that cried.' ]`}
-</CodeBlock>
+            'The Giraffe that cried.' ]
+``` 
+
 We can lowercase each word, remove any punctuation, and split on space. This will allow us to tokenize each word and count up how many times it appears in each sentence.
-<CodeBlock>
-{`import pandas as pd 
+
+```python 
+import pandas as pd 
 def create_doc_term_df(corpus, vectorizer):
     doc_term_matrix = vectorizer.fit_transform(corpus)
     df = pd.DataFrame(doc_term_matrix.toarray(), columns=vectorizer.get_feature_names_out())
     df.index.name = 'Sentence'
-    return df`}
-</CodeBlock>
+    return df
 Lets run the function and get the output
-<CodeBlock>
-{`from sklearn.feature_extraction.text import CountVectorizer
+
+`python 
+from sklearn.feature_extraction.text import CountVectorizer
 vectorizer = CountVectorizer()
 create_doc_term_df(account_names, vecotrizer)
 '''Output: 
@@ -39,8 +40,8 @@ Sentence
 0           1      0      0    0        0      0     0    0      1
 1           0      1      0    1        0      1     0    1      0
 2           0      0      1    0        1      0     1    1      0
-'''`}
-</CodeBlock>
+'''
+```
 
 Higher relevance is given to words that ppear more often across many sentences. The formula below calculates this frequency.
 
@@ -64,8 +65,8 @@ is the number of words in our list. For our toy example,<InlineMath math="N=9"/>
 The last step is to get the <InlineMath math="tfidf" />. We simply multiply the <InlineMath math="tf" /> and the <InlineMath math="idf" />. 
 <BlockMath math="tfidf_{i,j}(word) = tf_{i,j}\\cdot idf(word)" />
 
-<CodeBlock>
-{`from sklearn.feature_extraction.text import TfidfVectorizer
+```python 
+from sklearn.feature_extraction.text import TfidfVectorizer
 vectorizer = TfidfVectorizer()
 print(create_doc_term_df(text_data, vectorizer).to_string())
 '''output
@@ -74,8 +75,9 @@ Sentence
 0         0.707107  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000  0.00000  0.707107
 1         0.000000  0.528635  0.000000  0.528635  0.000000  0.528635  0.000000  0.40204  0.000000
 2         0.000000  0.000000  0.528635  0.000000  0.528635  0.000000  0.528635  0.40204  0.000000
-'''`}
-</CodeBlock>
+'''
+```
+
 {/* Line below needs to be empty */}
 
 export default ({children}) => <Layout meta={meta}>{children}</Layout>

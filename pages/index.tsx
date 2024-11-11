@@ -18,42 +18,10 @@ type BlogMetaData = {
   published_date: BlogDate;
 };
 
-// export const cos_meta = {
-//   title: "Comparing Vectors with Cosine Simlarity Function",
-//   published_date: { month: "July", date: "4th", year: 2022 },
-//   summary:
-//     "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python.",
-//   post_link: "cosine-similarity",
-// };
-
-// export const cos_pt2_meta = {
-//   title: "Large Scale Vector Comparison",
-//   published_date: { month: "July", date: "9th", year: 2022 },
-//   summary:
-//     "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs. The purpose of is to look at a real dataset.",
-//   post_link: "cosine-similarity-pt-2",
-// };
-
-// export const tfidf_meta = {
-//   title: "Term Frequency-Inverse Document Frequency",
-//   published_date: { month: "August", date: "1st", year: 2022 },
-//   summary:
-//     "In this tutorial we will look at what TF and IDF are and how they can be use to process text data in Machine learning.",
-//   post_link: "tfidf",
-// };
-
-// export const tech_stack_meta = {
-//   title: "Tech stack for rapid prototyping applications",
-//   published_date: { month: "June", date: "3rd", year: 2023 },
-//   summary:
-//     "In this blog I will focus on the ways in which I set up a backend and frontend to do rapid prototyping of full stack applications.",
-//   post_link: "tech-stack",
-// };
-
 const BlogPostView = ({ meta_data }: { meta_data: BlogMetaData }) => {
   const display_str = display_publication_date(meta_data.published_date);
   return (
-    <div className="hover:bg-orange-100 py-2 rounded hover:rounded-lg ease-in duration-200 border-l-4  border-white hover:border-indigo-400 px-3 flex flex-col space-y-2">
+    <div className="hover:bg-indigo-50 py-2 rounded hover:rounded-lg ease-in duration-200 border-l-4  border-white hover:border-indigo-400 px-3 flex flex-col space-y-2">
       <span className="text-indigo-600"> {display_str}</span>
       <span className="mt-3">
         <a href={meta_data.post_link}>{meta_data.title}</a>
@@ -96,7 +64,7 @@ function BlogPostListView({ blogs }: { blogs: BlogMetaData[] }) {
 
 const Home: NextPage = () => {
   return (
-    <div className="sm:mx-0 md:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10">
+    <div className=" sm:mx-0 md:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10 mb-20">
       <Navbar />
       <section className="space-y-2">
         <BlogPostListView

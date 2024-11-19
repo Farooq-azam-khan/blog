@@ -1,5 +1,6 @@
 {
-  "name": "next-app-tut",
+  "name": "blog",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,10 +10,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@heroicons/react": "^2.1.5",
+    "@heroicons/react": "^2.2.0",
     "@mdx-js/loader": "^2.3.0",
     "@mdx-js/react": "^2.3.0",
     "@next/mdx": "^13.5.7",
+    "@types/mdx": "^2.0.13",
     "@types/react-copy-to-clipboard": "^5.0.7",
     "@types/react-syntax-highlighter": "^15.5.13",
     "install": "^0.13.0",
@@ -35,8 +37,8 @@
     "autoprefixer": "^10.4.20",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.4",
-    "postcss": "^8.4.48",
-    "tailwindcss": "^3.4.14",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
     "typescript": "5.1.3"
   }
 }

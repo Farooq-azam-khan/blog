@@ -6,15 +6,14 @@ import { useEffect } from "react";
 import "@wooorm/starry-night/style/dark"
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
-// TODO: add copy to clipboard for code blocks
-function hasProps(jsx) {
+function hasProps(jsx: any) {
     return Object.prototype.hasOwnProperty.call(jsx, 'props');
 }
 
-function reduceJsxToString(previous, current) {
+function reduceJsxToString(previous: string, current: any): string {
     return previous + innerText(current);
 }
-function innerText(jsx) {
+function innerText(jsx: any) {
     if (jsx === null ||
         typeof jsx === 'boolean' ||
         typeof jsx === 'undefined') {

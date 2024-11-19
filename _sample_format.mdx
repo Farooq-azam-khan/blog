@@ -1,0 +1,14 @@
+import Layout from '../components/Layout.tsx'
+import { InlineMath, BlockMath } from 'react-katex'; 
+
+export const meta = { 
+    title : "[sample-title]", 
+    published_date : { month : "[month]", date : "[day]th", year : 2025 }
+    , summary : "TODO"
+    , post_link : "[slug]"
+}
+
+{/* Line below needs to be empty */}
+
+
+export default ({children}) => <Layout meta={meta}>{children}</Layout>

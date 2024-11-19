@@ -1,0 +1,90 @@
+import Counter from '../components/Counter.tsx'
+import Layout from '../components/Layout.tsx'
+import SyntaxHighlighter from 'react-syntax-highlighter'
+//import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
+
+export const meta = {
+    author: 'Farooq Azam Khan'
+}
+
+# My First Mdx page
+This highlights how I will write my blogs with MDX. 
+
+## example of math formula
+<BlockMath math="a^2+b^2 = c^2" /> 
+
+## code blocks
+
+```python
+print('hello python')
+```
+<SyntaxHighlighter language="javascript" children={'(num) => num+1'} />
+
+<SyntaxHighlighter language="python" children={'print("Hello World")'} />
+
+{/* copy to clipboard here */}
+
+<CopyToClipboard text={'abcdef'} className=" px-4 py-2 textinput mb-2">
+
+  <button>Copy Code</button>
+
+</CopyToClipboard>
+
+```python 
+import torch 
+print(torch.nn(10,10))
+print(torch.randn(10, 20, 30))
+```
+
+```python 
+import numpy as np 
+from typing import List 
+
+def get_cosine_similarity(arr1, arr2):
+	numerator = np.dot(arr1, arr2)
+	mag1 = np.sqrt(np.sum(np.square(arr1)))
+	mag2 = np.sqrt(np.sum(np.square(arr2)))
+	return numerator / (mag1*mag2)
+ 
+def get_document_similarities(model, documents: List[str]):
+	similarities = [[0 for _ in range(len(documents))] 
+					for _ in range((len(documents)))]
+	for i, doc1 in enumerate(documents):
+		doc1_enc = model.encode(doc1)
+		for j, doc2 in enumerate(documents):
+			doc2_enc = model.encode(doc2)
+			sim = get_cosine_similarity(doc1_enc, doc2_enc)
+			similarities[i][j] = sim
+	return similarities
+
+def get_document_similarities_faster(model, documents: List[str]):
+	similarities = [[0 for _ in range(len(documents))] 
+					for _ in range((len(documents)))]
+	for i, doc1 in enumerate(documents):
+		doc1_enc = model.encode(doc1)
+		for j, doc2 in enumerate(documents):
+			if i == j:
+				similarities[i][j] = 1
+			elif i>j:
+				doc2_enc = model.encode(doc2)
+				sim = get_cosine_similarity(doc1_enc, doc2_enc)
+				similarities[i][j] = sim
+				similarities[j][i] = sim
+			elif i<j:
+				continue
+	return similarities
+
+def cosine_similarity_matrix(model, documents: List[str]):
+	document_encodings = model.encode(documents)
+	numerator = np.matmul(document_encodings, document_encodings.T)
+	row_sum = np.sqrt(np.sum(np.square(document_encodings), axis=1, keepdims=True))
+	denominator = np.matmul(row_sum, row_sum.T)
+	return numerator / denominator # will be done elementwise  
+```
+
+## typescript code execution + components
+<Counter start_counter={5} /> 
+export default ({children}) => <Layout meta={meta}>{children}</Layout>

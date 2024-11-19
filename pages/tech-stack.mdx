@@ -1,0 +1,100 @@
+import Layout from "../components/Layout.tsx";
+import { InlineMath, BlockMath } from "react-katex";
+
+export const meta = {
+  title: "Tech stack for rapid prototyping applications",
+  published_date: { month: "June", date: "3rd", year: 2023 },
+  summary:
+    "In this blog I will focus on the ways in which I set up a backend and frontend to do rapid prototyping of full stack applications.",
+  post_link: "tech-stack",
+};
+
+# Introduction
+
+In this blog I would like to share some of the technologies I like to use when developing web applications for rapid prototyping. One of such technologies is Elm. Elm is a functional programming language used for building scalable UIs. It is known for its ease of use and its ability to produce high-quality applications. TailwindCSS, on the other hand, is a utility-first CSS framework used for building modern websites. It enables developers to style their applications easily and quickly. Vite is a build tool that offers fast development and a smooth development experience. FastAPI is a web framework used for building APIs quickly. In this blog post, I will outline how I have setup these three technologies to work cohesively to build web applications quickly. I have had great success in developing prototypes quickly as well as pivoting on ideas if the need arises.
+
+If you would like to get started with this tech-stack you can check it out [here](https://github.com/Farooq-azam-khan/fastapi-elm-tailwind-techstack).
+
+# Setting up Python FastAPI backend with Poetry
+
+Poetry is a dependency manager and build tool for Python. It simplifies the process of managing dependencies and building Python packages. Here's how to set up a FastAPI backend with Poetry:
+
+1. First, install Poetry by running the following command:
+
+```bash 
+curl -sSL https://install.python-poetry.org | python3 -
+```
+Any subsequent information about poetry can be retrieved from [here](https://python-poetry.org/docs/).
+
+2. Add the necessary dependencies for FastAPI by running the following command:
+
+```bash 
+poetry add fastapi uvicorn jinja2
+```
+
+3. Create a new file called `main.py` and add the following code:
+```python 
+from fastapi import FastAPI
+app = FastAPI()
+@app.get("/")
+async def home_api():
+   return "Hello world"
+```
+
+This code sets up a basic FastAPI application. Note how the default response for fastapi is json.
+
+4. Finally, start the server by running the following command:
+```python 
+poetry run uvicorn main:app --reload
+```
+   This command will start the Uvicorn server and reload the server whenever changes
+   are made to the code.
+
+That's it! You now have a basic FastAPI backend set up with Poetry. You can visit `localhost:8000/docs` all the available api rest endpoints.
+
+## The Benefits of FastAPI
+
+FastAPI is a web framework that offers several benefits when building APIs. It is built on top of Starlette, which is a lightweight ASGI framework. This means that FastAPI is fast and can handle a large number of requests, both synchronous and asynchronous. FastAPI also comes with built-in support for documentation, which reduces the time needed to create a viable API.
+
+# Setting up Elm with Vite and TailwindCSS
+
+To set up Elm with Vite and TailwindCSS, we need to install the necessary dependencies and configure our application files. I have done this in the `app` sub-folder of the root folder. Here are the steps:
+
+1. First, install the necessary dependencies by running the following command:
+
+`npm install -D typescript vite vite-plugin-elm elm elm-format autoprefixer postcss tailwindcss`
+
+2. Next, create a new file called `tailwind.css` in the `src` directory.
+
+3. Create a new file called index.html in the root directory and add this code: https://github.com/Farooq-azam-khan/elm-vite-setup/blob/main/index.html
+
+4. Create a new file called index.ts in the app directory and add the code below. Note how working with vite is very simple to do. Any css or elm files I need to import can be done with a simple import statement. https://github.com/Farooq-azam-khan/elm-vite-setup/blob/main/index.ts
+
+5. Demo elm app:
+   Create a new file called `Main.elm` in the app/srcdirectory and add the code below. This is a basic counter app with some pre-config for external interaction with apis and javascirpt. This blog also assues that you have a basic understanding of elm thus, no detail will be provided on how the code actuall works. To get up to speed with elm development visit: https://guide.elm-lang.org/.
+
+https://github.com/Farooq-azam-khan/elm-vite-setup/blob/main/src/Main.elm
+
+6. Finally, configure the `vite.config.js` file by adding the following code: https://github.com/Farooq-azam-khan/elm-vite-setup/blob/main/vite.config.ts
+
+This code configures Vite to use the `vite-plugin-elm` and the `http` proxy for [localhost](http://localhost) development. That way any requests you sent to `/api/*` will be routed to `[localhost:8000](http://localhost:8000)` instead of the frontend application.
+
+In the `vite.config.js` file the proxy is also setup under the server.proxy location. To learn more, visit: https://vitejs.dev/config/server-options.html.
+
+That's it! You can now run the application by running the following command:
+`npm start`
+
+## The Benefits of Elm and TailwindCSS
+
+Why do all this setup? Why not stick with react or vanilla JS and plain old CSS? Elm and TailwindCSS have several benefits when used together. Elm's functional programming paradigm makes it easy to write clean and maintainable code. This code can easily be refactored and more importantly the compiler will help in every step of the process. That is because it has one of the most easy to understand messages. The language is also extremely easy to develop in once the initial hurdles of understanding the elm-architecture have been understood. It also offers a type-safe environment that catches errors at compile-time, which reduces the number of bugs in production.
+
+TailwindCSS, on the other hand, provides a set of pre-defined CSS classes that can be used to style your application. It is also a utility first framework which makes it easy to develop custom styles. This eliminates the need to write custom CSS styles and saves development time. It also offers a mobile-first approach to styling, which ensures that your application looks great on all devices. Lastly, it mitigates the need to write css class names which arguably is the hardest thing to do in web development.
+
+# Conclusion
+
+Using Elm, TailwindCSS, Vite, and FastAPI to build a web application is an excellent way to take advantage of these technologies' benefits. Setting up a Vite proxy to listen to the `/api` route is a straightforward process that can be completed in a few steps. When used together, Elm and TailwindCSS offer several benefits, including clean and maintainable code and easy styling. FastAPI is a web framework that provides several benefits when building APIs, including speed and simplicity.
+{/* Line below needs to be empty */}
+
+export default ({children}) => <Layout meta={meta}>{children}</Layout
+
+>

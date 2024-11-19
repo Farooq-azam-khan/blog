@@ -1,0 +1,210 @@
+import Layout from '../components/Layout.tsx'
+import { InlineMath, BlockMath } from 'react-katex'
+
+export const meta = { 
+    title : "Comparing Vectors with Cosine Simlarity Function", 
+    published_date : { month : "July", date : "4th", year : 2022 }
+    , summary : "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python."
+    , post_link : "cosine-similarity"
+}
+
+# What is Cosine Similarity? 
+Cosine similarity is a mathematical fuction that aims to measure the angle between two vecotrs. The angle is an indicator of how close the vectors are to each other. If the angle is 1, then the two vectors lie on top of each other; thus, are exactly the same. If the angle is 0, then the vectors are perpendicular. This is very useful when we want to compare one thing to another and see if they are the same. All we have to do is get a vector representaion of the two objects and apply a cosine similarity function to it. For example, we can compare sentences.
+
+* "The quick brown fox jumps over the lazy dogs."
+* The quick fox jumped over the dogs."
+
+Semantically, these two sentences are saying the same thing, but the adjectives in the second sentence are removed. Programmatically generating a rule based system to verify if these two sentences are similar would be difficult. In vector form the task is much simpler. We would like to have a vector representation of these two sentences such that their similarity score is close to 1 (i.e. 100%).
+
+Other applications include, impage comparison, plagarism detection, etc.
+
+# How do you calculate it?
+Below is the formula to calculate cosine similarity, 
+<BlockMath math="cos(\theta) = \frac{x y}{\Vert x \Vert \cdot \Vert y \Vert}" /> 
+
+We perform a dot product on the two vectors and then we normalize with respect to both vectors.
+
+Let <InlineMath math="x=[1,2,3]"/>, and <InlineMath math="y=[4,5,6]"/>. 
+
+The dot product is
+<BlockMath math="[1,2,3] \cdot [4,5,6] = 3 + 10 + 18 = 32" />
+
+And the magnitude is 
+<BlockMath math="1^2 + 2^2 + 3^2 = 1+ 4 + 9 = 14" />
+<BlockMath math="4^2 + 5^2 + 6^2 = 77" />
+
+The similarity between the two vectors is 
+<BlockMath math="\frac{32}{14\cdot 77} = 0.029" />
+
+We will use a pretrained deep learning model to generate vector representations of sentenes in an attempt to find similarities between sentences using the cosine similarity function.
+
+```python 
+from sentence_transformers import SentenceTransformer
+# The Deep Learning model that will give us the vector representation
+model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+# The two sentences we want to compare
+s1 = 'The quick brown fox jumps over the lazy dogs'
+s2 = 'The quick fox jumped over the dogs'
+# Apply the model to get the number representation
+s1_encoding = model.encode(s1)
+s2_encoding = model.encode(s2)
+mag_s1 = np.sqrt(np.sum(np.square(s1_encoding)))
+mag_s2 = np.sqrt(np.sum(np.square(s2_encoding)))
+np.dot(s1_encoding, s2_encoding) / (mag_s1 * mag_s2)
+# Output: 0.8754566
+```
+
+The above example imports the stentence transformers library (`pip install sentence-transformers`). 
+
+We use the `paraphrase-Mini-L6-v2` model for calculating the encodings for each sentence. After applying the cosine similarity function we get a score of 0.875 which indicates the two sentences are very similary. 
+
+Note that the similarity score will differ depending on the model we select; however, maximizing the accuracy is not the point of this blog. I am more interested in scaling the solution to large datasets.
+
+# Large Scale Solution
+Suppose you have a list of documents (could be tens of thoushands) and you would like to compare all of them against each other. It would be very simple to get the vector encodings and do an element wise compairson. Below is the code; however, it is slow and redundant.
+
+```python 
+def get_cosine_similarity(arr1, arr2):
+    numerator = np.dot(arr1, arr2)
+    mag1 = np.sqrt(np.sum(np.square(arr1)))
+    mag2 = np.sqrt(np.sum(np.square(arr2)))
+    return numerator / (mag1*mag2)
+
+def get_document_similarities(model, documents: List[str]):
+    similarities = [[0 for _ in range(len(documents))] 
+                    for _ in range((len(documents)))]
+    for i, doc1 in enumerate(documents):
+            doc1_enc = model.encode(doc1)
+            for j, doc2 in enumerate(documents):
+                doc2_enc = model.encode(doc2)
+                sim = get_cosine_similarity(doc1_enc, doc2_enc)
+                similarities[i][j] = sim
+    return similarities
+```
+
+The complexity of the above algorithm is <InlineMath math="O(n^2)"/> in terms of calculating the vector encodings for each document, assuming calculating the encodings and the cosine similarity is constant time complexity.
+
+Although we cannot get past the <InlineMath math="O(n^2)" /> limit set on our time complexity we can definitely make the algorithm faster.
+* The encodings for each document is being calculated more than once. We can pre-compute that. 
+* We are using python to calculate the cosine similarity. Using underlying numpy's matrix multiplication will also make the computation faster.
+
+## Part 1: Get rid of Redundancy
+Cosine simlarity is order independent, i.e. `similarity(doc1, doc2) = similarity(doc2, doc1)`.
+
+So if you have <InlineMath math="n" /> documents, you do not want to compare against itself either. Thus the number computations reduce by <InlineMath math="\frac{1}{2}" />. It becomes:  <InlineMath math="(n^2-1) / 2"/>. 
+```python 
+def get_document_similarities(model, documents: List[str]):
+    similarities = [[0 for _ in range(len(documents))]
+                    for _ in range((len(documents)))]
+    for i, doc1 in enumerate(documents):
+            doc1_enc = model.encode(doc1)
+            for j, doc2 in enumerate(documents):
+                if i == j:
+                    similarities[i][j] = 1
+                elif i>j:
+                    doc2_enc = model.encode(doc2)
+                sim = get_cosine_similarity(doc1_enc, doc2_enc)
+                similarities[i][j] = sim
+                similarities[j][i] = sim
+            elif i<j:
+                continue
+    return similarities
+```
+
+Problems,
+* Redundant document encoding can be fixed with a hashmap
+* Does not leverage fast C libraries for fast operations. Can be fixed with numpy arrays and matrix manipulation
+
+## Part 2: Matrix Multiplication
+Let stack all document encodings rowise within a matrix. To make it simpler we will use a 2d vector representation for each document (in practice, as above, these dimension scale to 600+). 
+
+Let, <InlineMath math="x = [a,b]"/> and <InlineMath math="y = [c,d]"/>.
+
+We define our <InlineMath math="A" /> matrix as a stacking of our <InlineMath math="x"/> and <InlineMath math="y"/> vectors. 
+{/* new line required below */}
+
+<BlockMath math="A = \begin{bmatrix}
+   a & b \\
+   c & d
+\end{bmatrix}"/> 
+
+Lets multiply <InlineMath math="A" /> by <InlineMath math="A^T"/>. 
+<BlockMath math="AA^T = \begin{bmatrix}
+   a & b \\
+   c & d
+\end{bmatrix} \cdot \begin{bmatrix}
+   a & c \\
+   b & d
+\end{bmatrix} =  \begin{bmatrix}
+   a^2+b^2 & ac+bd \\
+   ca+db & c^2+d^2
+\end{bmatrix} = \begin{bmatrix}
+   x x & xy \\
+   yx & yy
+\end{bmatrix}" />
+
+Notice that this gives us the numerator portion of our cosine function. Why does this work? This is because the numerator is a dot product operation. That is what matrix multiplication is. A dot product!
+
+All that is left now is to get the denominator and do an element wise division with our <InlineMath math="A" /> matrix to get the cosine similarities. 
+
+In order to get the denominator for each pair of vectors, we first need to get the magnitude of each element. That works as follows.
+
+Square each element
+<BlockMath math="A^2 = \begin{bmatrix}
+   a & b \\
+   c & d
+\end{bmatrix}^{ \circ 2} = \begin{bmatrix}
+   a^2 & b^2 \\
+   c^2 & d^2
+\end{bmatrix}" />
+
+Sum all rows in the <InlineMath math="A^2"/> matrix and set the resulting vector to <InlineMath math="b" />. 
+<BlockMath math="b = \begin{bmatrix}
+   \sqrt{a^2 + b^2} \\
+   \sqrt{c^2 + d^2}
+\end{bmatrix} = \begin{bmatrix}
+   |x| \\
+   |y|
+\end{bmatrix}" />
+The computation of <InlineMath math="b \\cdot b^T" /> is the resulting matrix for magnitudes of each pair of vectors.
+
+<BlockMath math="B = \begin{bmatrix}
+   |x| \\
+   |y|
+\end{bmatrix} \cdot \begin{bmatrix}
+   |x| &
+   |y|
+\end{bmatrix} = \begin{bmatrix}
+   |x|^2 & |y|\cdot |x| \\
+   |x|\cdot |y| & |y|^2
+\end{bmatrix}"/>
+
+Finally the resulting similarity matrix is the element wise multiplication of our <InlineMath math="A" /> matrix and our reciprocal <InlineMath math="\frac{1}{B}" /> matrix.
+<BlockMath math="S = A \circledast \frac{1}{B}"/>
+Cosine similarity of all sentences. Loose redundancy and repetition; however, when performing matrix batch operations (which have been heavily optimized) is much faster.
+```python 
+def cosine_similarity_faster(model, documents: List[str]):
+    document_encodings = np.array([model.encode(doc) for doc in documents])
+    numerator = np.matmul(document_encodings, document_encodings.T)
+    row_sum = np.sqrt(np.sum(np.square(document_encodings), axis=1, keepdims=True))
+    denominator = np.matmul(row_sum, row_sum.T)
+    return numerator / denominator # will be done elementwise 
+
+cosine_similarity_faster(model, 
+    ['The quick brown fox jumps over the lazy dogs',
+    'The quick fox jumped over the dogs']
+)
+'''
+array([[1.0000004 , 0.87545466],
+       [0.87545466, 1.0000004 ]], dtype=float32)
+'''
+```
+
+## Make it Faster Part 3
+In an upcoming blog, we will look at making the above algorithm much faster, and use a real life dataset to show how powerful this implementation is.
+
+<a className="text-indigo-600" href="/cosine-similarity-pt-2">To be Continued</a>
+{/* Line below needs to be empty */}
+
+
+export default ({children}) => <Layout meta={meta}>{children}</Layout>

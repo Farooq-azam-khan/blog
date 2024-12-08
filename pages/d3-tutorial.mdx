@@ -1,5 +1,6 @@
 import Layout from "../components/Layout.tsx";
 import { InlineMath, BlockMath } from "react-katex";
+import * as d3 from 'd3';
 
 export const meta = {
   title: "D3 Tutorial",
@@ -12,6 +13,147 @@ export const meta = {
 # External Links
 The tutorial is located [here](https://farooq-azam-khan.github.io/d3js-tutorials/).
 The github link is located [here](https://github.com/Farooq-azam-khan/d3js-tutorials/tree/master). 
+
+# 1. Working with JS
+
+Reduce function is cool. Here is how you use it.
+```javascript
+cars = [
+    {
+        "make": "Nissan",
+        "model": "Leaf",
+        "year": 2012,
+        "price": 1800
+    },
+    {
+        "make": "Ford",
+        "model": "F150",
+        "year": 2009,
+        "price": 1950
+    },
+    {
+        "make": "Chevrolet",
+        "model": "Trailblazer",
+        "year": 2009,
+        "price": 2100
+    },
+    {
+        "make": "Tesla",
+        "model": "ModelX",
+        "year": 2012,
+        "price": 100000
+    }
+]
+
+const formatCar = car =>
+  `${car.year} ${car.make} ${car.model}: ${car.price}`;
+
+data.reduce((acc, d) => {
+  acc += formatCar(d) + "\n";
+  return acc;
+}, "");
+/* 
+2012 Nissan Leaf: 1800
+2009 Ford F150: 1950
+2009 Chevrolet Trailblazer: 2100
+2012 Tesla ModelX: 100000
+*/
+```
+
+# 2. Scalable Vector Graphics (SVG)
+Use the `<svg>` tag to make Scalable Vector Graphs. 
+- `<circle cx="??" cy="??" r="?">`
+<svg height="100" width="100" className="bg-gray-300 mx-auto">
+  <circle r="50" cx="50" cy="50"></circle>
+</svg>
+- `<rect x="??" y="??" width="??" height="??">`
+<svg height="100" width="100" className="bg-gray-300 mx-auto">
+  <rect x="10" y="10" width="20" height="20"></rect>
+  <rect x="35" y="10" width="20" height="35"></rect>
+  <rect x="65" y="10" width="20" height="50"></rect>
+  <rect x="10" y="90" width="80" height="5"></rect>
+</svg>
+
+- `<g>` is used to group elements. This helps to apply styles and transformation to all child elements.
+<svg height="100" width="200" className="bg-gray-300 mx-auto">
+  <circle r="50" cx="50" cy="50"></circle>
+  <g transform="translate(100,0)">
+    <rect x="10" y="10" width="20" height="20"></rect>
+    <rect x="35" y="10" width="20" height="35"></rect>
+    <rect x="65" y="10" width="20" height="50"></rect>
+    <rect x="10" y="90" width="80" height="5"></rect>
+  </g>
+</svg>
+
+- `<path d="??">` describes any polygon. It needs a starting point (`M x,y`) and then a line (`L x2,y2`).
+<svg height="100" width="100" className="bg-gray-300 mx-auto">
+
+    <path
+      stroke="black"
+      strokeWidth="2"
+      fill="none"
+      d="M 10,5 L 10,95"
+    ></path>
+    <path
+      stroke="black"
+      strokeWidth="2"
+      fill="none"
+      d="M 10,95 L 95,95"
+    ></path>
+    <line stroke-weight="3" stroke="red" x1="15" y1="85" x2="95" y2="10"> </line>
+</svg>
+
+# 3. Making a Face
+
+export const width = 520 
+export const height = 520 
+export const eyeRadius = 30;
+export const eyeHeight = 60;
+export const eyeOffset = 80;
+export const mouthOffset = 10;
+export const eyeBrowAngleOffset = Math.PI / 6;
+export const eyeBrowXOffset = eyeOffset;
+export const eyeBrowYOffset = 60;
+export const timeTranstion = 1000;
+export const arc = d3.arc();
+
+ <svg className="fill-current text-indigo-200" id="face" width={width} height={height}>
+  <circle r="200" cx={width/2} cy={height/2}  stroke="black" />
+  {/* eyes */}
+  <g transform={`translate(${width/2}, ${height/2})`} fill="black">
+    <circle r="30" cx={-eyeOffset} cy="-60" fill="black" />
+    <circle r="30" cx={eyeOffset} cy="-60" fill="black" />
+    <circle />
+  </g>
+  {/* Eye Brows */}
+  <g  transform={`translate(${width/2}, ${height/2})`}>
+  {/* left eye brow */}
+  <path transform={`translate(${-eyeBrowXOffset}, ${-eyeBrowYOffset})`} fill="black" d={arc({
+        innerRadius: 40,
+        outerRadius: 50,
+        startAngle: Math.PI / 2 - eyeBrowAngleOffset,
+        endAngle: -Math.PI / 2 + eyeBrowAngleOffset
+      })} />
+    {/* right eye brow */}
+    <path transform={`translate(${eyeBrowXOffset}, ${-eyeBrowYOffset})`} fill="black" d={arc({
+        innerRadius: 40,
+        outerRadius: 50,
+        startAngle: Math.PI / 2 - eyeBrowAngleOffset,
+        endAngle: -Math.PI / 2 + eyeBrowAngleOffset
+      })} />
+  </g>
+  {/* mouth */}
+  <g transform={`translate(${width/2}, ${height/2+mouthOffset})`}> 
+    <path fill="black" d={arc({
+      innerRadius: 130,
+      outerRadius: 150,
+      startAngle: Math.PI / 2,
+      endAngle: (3 * Math.PI) / 2
+    })}/>
+  </g>
+ </svg>
+{/* TODO: figure out how transitions will be done. */}
+
 {
   /* Line below needs to be empty */
 }

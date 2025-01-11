@@ -51,12 +51,11 @@ const Layout = ({ children }: any) => {
     useEffect(() => {
     }, [])
     return (
-        <div className="mx-auto max-w-3xl lg:max-w-5xl mb-10">
-            <div className="mt-10">
-                <Navbar />
-            </div>
-            {/* {JSON.stringify(meta)} */}
-            <div className="prose lg:prose-xl 2xl:prose-2xl mt-16 prose-indigo">
+        <div className="px-10 mb-10 space-y-16">
+                <div className="mt-10">
+                <Navbar /></div>
+            <div className="prose lg:prose-xl 2xl:prose-2xl prose-indigo">
+           
                 <MDXProvider components={function() {
                     return { pre: PreWithCopy }
                 }}>{children}</MDXProvider>
@@ -64,5 +63,10 @@ const Layout = ({ children }: any) => {
         </div>
     );
 };
+
+export  function MdxLayout({ children }: { children: React.ReactNode }) {
+    // Create any shared layout or styles here
+    return <div className="prose lg:prose-xl 2xl:prose-2xl mt-16 prose-indigo">{children}</div>
+  }
 
 export default Layout;

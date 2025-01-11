@@ -1,5 +1,8 @@
 import createMDX from '@next/mdx'
 import rehypeStarryNight from 'rehype-starry-night'
+import remarkMath from 'remark-math'
+import rehypeMathjax from 'rehype-katex'
+import rehypeKatex from 'rehype-katex'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -7,7 +10,7 @@ const nextConfig = {
     // Append the default value with md extensions
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     reactStrictMode: true,
-    swcMinify: true,
+    // swcMinify: true,
     images: {
         formats: ["image/avif", "image/webp"],
         remotePatterns: [{
@@ -24,8 +27,9 @@ const nextConfig = {
 const withMDX = createMDX({
     extension: /\.mdx?$/,
     options: {
-        remarkPlugins: [],
-        rehypePlugins: [
+        remarkPlugins: [remarkMath],//[],
+        rehypePlugins: [rehypeKatex, 
+        // rehypeMathjax,
             rehypeStarryNight
         ],
         // mdxRs: true, // experimental rust based compiler

@@ -3,7 +3,7 @@ import Layout, {MdxLayout} from '../components/Layout.tsx'
 export const meta = { 
     title : "Importance of Maximum Likelihood Estimation for Machine Learning", 
     published_date : { month : "January", date : "11th", year : 2025 }
-    , summary : "TODO"
+    , summary : "In this blog post I explain how the Maximum Likelihood Estimator is used in Machine Learning."
     , post_link : "/mle"
 }
 
@@ -75,11 +75,18 @@ We not have to find the $\theta$ for which $\log P(D|\theta)$ is maximum.
 ### Step 1: Take the Derivative
 
 The MLE looks at how the probability density function changes with respect to $\theta$. This means we take the derivative. 
+
 $$
 \begin{align*}
 \frac{d P(D|\theta)}{d\theta} &=& \frac{d}{d\theta} \left[ \log {n_H + n_T \choose n_H} + n_H \log \theta + n_T \log (1-\theta) \right]\\
-= \frac{d}{d\theta} \left[ \log {n_H + n_T \choose n_H} \right] + \frac{d}{d\theta} [ n_H \log \theta ] + \frac{d}{d\theta} [ n_T \log (1-\theta)]\\
-&=& 0 + \frac{n_H}{\theta} + \frac{-n_T}{1-\theta}\\
+&=& \frac{d}{d\theta} \left[ \log {n_H + n_T \choose n_H} \right] + \frac{d}{d\theta} [ n_H \log \theta ] + \frac{d}{d\theta} [ n_T \log (1-\theta)]\\
+\end{align*}
+$$
+
+Simplify:
+$$
+\begin{align*}
+\frac{d P(D|\theta)}{d\theta} &=& 0 + \frac{n_H}{\theta} + \frac{-n_T}{1-\theta}\\
 &=& \frac{n_H}{\theta} - \frac{n_T}{1-\theta}\\
 \end{align*}
 $$
@@ -278,7 +285,7 @@ A function is convex if the following is true:
 2. it has a second derivative
 3. the second derivative is non-negative in its entire domain. 
 
-## Gradient descent Algorithm
+## Gradient Descent Algorithm
 
 **Input**:
 * Time step $T$
@@ -291,12 +298,14 @@ A function is convex if the following is true:
 * for each time step $t$ from $0\ldots (T-1)$:
     * compute the gradient of the loss function w.r.t each model parameter:
 $$
-g(w) = - \frac{\partial l(w,b)}{\partial w$} \text{ and } g(b) = \frac{-d l(w,b)}{db}
+g(w) = - \frac{\partial l(w,b)}{\partial w} \text{ and } g(b) = \frac{-d l(w,b)}{db}
 $$
-    * Update the model parameters by moving in the direction opposite to the gradients, scaled by the learning rate:
+
+* Update the model parameters by moving in the direction opposite to the gradients, scaled by the learning rate:
 $$
 w = w − \alpha g(w) \text{ and } b = b−\alpha g(b)
 $$
+
 **Output**:
 * model parameters $w$ and $b$
 

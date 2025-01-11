@@ -51,10 +51,10 @@ const Layout = ({ children }: any) => {
     useEffect(() => {
     }, [])
     return (
-        <div className="px-10 mb-10 space-y-16">
+        <div className="px-10 lg:mx-auto lg:max-w-6xl mb-10 space-y-16">
                 <div className="mt-10">
                 <Navbar /></div>
-            <div className="prose lg:prose-xl 2xl:prose-2xl prose-indigo">
+            <div className="w-full prose md:prose-lg lg:prose-xl 2xl:prose-2xl prose-indigo">
            
                 <MDXProvider components={function() {
                     return { pre: PreWithCopy }

@@ -1,6 +1,12 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
-import MLEBlog, {mle_metadata} from "./mle.mdx"
+
+export const mle_metadata = { 
+  title : "Importance of Maximum Likelihood Estimation for Machine Learning", 
+  published_date : { month : "January", date : "11th", year : 2025 }
+  , summary : "In this blog post I explain how the Maximum Likelihood Estimator is used in Machine Learning."
+  , post_link : "/mle"
+};
 
 // TODO: dynamically render meta data
 const blog_metadata: any[] = [

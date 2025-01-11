@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
-import MLEBlog, {meta as mle_meta} from "./mle.mdx"
+import MLEBlog, {mle_metadata} from "./mle.mdx"
 
 // TODO: dynamically render meta data
 const blog_metadata: any[] = [
-  mle_meta,
+  mle_metadata,
   {
     title: "Term Frequency-Inverse Document Frequency",
     published_date: { month: "August", date: "1th", year: 2022 },

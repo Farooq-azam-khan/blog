@@ -1,0 +1,325 @@
+import Layout, {MdxLayout} from '../components/Layout.tsx'
+
+export const meta = { 
+    title : "Importance of Maximum Likelihood Estimation for Machine Learning", 
+    published_date : { month : "January", date : "11th", year : 2025 }
+    , summary : "TODO"
+    , post_link : "/mle"
+}
+
+# Introduction
+
+Maximum Likelihood Estimation (MLE) is an important mathematical tool used frequently in statistical modeling. IT also provides the foundation for Machine Learning (ML) and Deep Learning (DL) models. Solving for the MLE provides insights into how ML models learn and what the best it is for them to learn. 
+
+In this blog, we will explore MLE by breaking down the mathematical concepts behind it, and build a theoretical foundation  for training ML models. 
+
+We will look at 3 models and analyze why and how the MLE guides us in parameter estimation:
+1. Binomial Distribution 
+2. Linear Regression Model
+3. Logistic Regression Model
+
+# What is MLE?
+
+In probability theory, we use a probability distribution to make inferences about data. Often, we have large amounts of data but cannot make assumptions about its distribution. MLE provides a method to estimate the probability distribution from data.
+
+# What is the Goal of MLE?
+
+The goal of MLE is to find the best parameters for a model. When the best parameters are found, it can be used to make accurate predictions.
+
+The way MLE finds these parameters is by maximizing the likelihood function. The likelihood function changes depending on the model you use. 
+$$
+\hat{\theta} = \arg\max_{\theta \in \Theta} \mathcal{L}_n(\theta; y)
+$$
+
+The equation above is say that we can find the best model parameters ($\hat{\theta}$) by looking at all the possible model parameters in the set $\Theta$ and calculating likelihood of seen the given data. 
+
+# MLE for Binomial Distribution
+
+Lets look at an example to see how the MLE is calculated. 
+
+Consider an experiment where a coin is tossed 20 times, and we observe the number of heads. Our goal is to determine whether the coin is fair. The model for this task is the Binomial Distribution.
+
+## What is the Binomial Distribution?
+
+The Binomial Distribution is a discrete distribution that describes the probability of obtaining an successful outcome from independent trials. 
+$$
+P(x=k;p) = {n \choose k}p^k(1-p)^{n-k}
+$$
+In our coin toss experiment, we have $n=20$ trials, and the observation $k$ is the amount of times we see heads. The model parameter we want to find is $p$ the probability of getting heads vs tails. 
+
+If we assume that the coin is fair then we could set $p=0.5$; however, this runs the risk of our assumption being wrong in the real world. With MLE we do not have to make this assumption, but instead use data to find it. The data may reveal a different probability distribution.  
+
+## Steps to Finding the MLE
+
+Since we do not know what $p$ is we will set to a parameter,  $\theta$:
+$$
+P(D|p=\theta) = {n_H+n_T \choose n_H}\theta^{n_H}(1-\theta)^{n_T}
+$$
+$D$ is our data, i.e. the number of times we observed heads and tails.  
+$$
+\hat{\theta} = \arg\max_\theta P(D|\theta) 
+$$
+
+### Step 0: Setup the Loss Likelihood Function 
+
+Repeatedly multiplying numbers between 000 and 111 can lead to numerical instability. To address this, we apply the logarithm to the distribution. This transformation is mathematically justified, as the logarithmic function is monotonically increasing, preserving the relative order of values. This mean that if $P(D|\theta)$ increases then so will $\log P(D|\theta)$. 
+
+$$
+\begin{align*}
+\hat{\theta} &= \arg\max_\theta P(D|\theta) = \arg\max_\theta \log P(D|\theta) \\
+\log P(D|\theta) &= \log {n_H + n_T \choose n_H} + n_H \log \theta + n_T \log (1-\theta)
+\end{align*}
+$$
+We not have to find the $\theta$ for which $\log P(D|\theta)$ is maximum.  
+
+### Step 1: Take the Derivative
+
+The MLE looks at how the probability density function changes with respect to $\theta$. This means we take the derivative. 
+$$
+\begin{align*}
+\frac{d P(D|\theta)}{d\theta} &=& \frac{d}{d\theta} \left[ \log {n_H + n_T \choose n_H} + n_H \log \theta + n_T \log (1-\theta) \right]\\
+= \frac{d}{d\theta} \left[ \log {n_H + n_T \choose n_H} \right] + \frac{d}{d\theta} [ n_H \log \theta ] + \frac{d}{d\theta} [ n_T \log (1-\theta)]\\
+&=& 0 + \frac{n_H}{\theta} + \frac{-n_T}{1-\theta}\\
+&=& \frac{n_H}{\theta} - \frac{n_T}{1-\theta}\\
+\end{align*}
+$$
+
+### Step 2: Set the derivative to $0$
+
+$$
+\begin{align*}
+\frac{dP(D|\theta)}{d\theta} &=& 0 \\ 
+\frac{n_H}{\theta}-\frac{n_T}{1-\theta} &=& 0 \\
+\frac{n_H}{\theta}&=& \frac{n_T}{1-\theta} \\
+\end{align*}
+$$
+
+### Step 3: Solve for $\theta$
+
+$$
+\begin{align*}
+\frac{n_H}{\theta}&=& \frac{n_T}{1-\theta} \\
+(1-\theta)n_H &=& n_T\theta \\
+n_H-n_H\theta &=& n_T\theta \\
+n_H&=&n_H\theta + n_T\theta \\
+\theta(n_H+ n_T) &=& n_H \\
+\theta &=& \frac{n_H}{(n_H+ n_T)} \\
+\end{align*}
+$$
+
+### Sanity Check
+
+In our experiment we saw that $n_H=10$, and $n_H+n_T=20$.  
+
+Solving for $\theta= \frac{10}{20} = 0.5$. This shows us that indeed the coin is fair. 
+
+
+# MLE for Linear Regression
+
+Linear Regression is a Machine Learning task where we estimate a linear equation to find a hyperplane in $d$ dimensions.  
+
+We make the assumption that the data will fit the line $y = w^Tx + \epsilon$ where $\epsilon$ is normally distributed noise in the data. $x$ are the features we observe, $w$ is the weight matrix of the model, and $y$ is the predicted output. 
+
+The MLE parameterizes $w$. 
+$$
+\begin{align*}
+\hat{w} =& \arg\max_w \prod_{i=1}^n P(y_i|x_i,w) \\
+P(y_i|x_i,w) =& \frac{1}{2\pi\sigma^2}e^{\frac{(x_i^Tw-y_i)^2}{2\sigma^2}} \\ 
+\hat{w} =& \arg\max_w \sum_{i=1}^n \left[ \log \left(\frac{1}{\sqrt{2\pi \sigma^2}} \right) + \log \left(e^{-\frac{(x_i^Tw - y_i)^2}{2\sigma^2}} \right) \right]
+\end{align*}
+$$
+Simplifying gives us the following:
+$$
+\begin{alignat*}{2}
+\hat{w} &=& \arg\max_w \sum_{i=1}^n \left[ \log \left(\frac{1}{\sqrt{2\pi \sigma^2}} \right) + \log \left(e^{-\frac{(x_i^Tw - y_i)^2}{2\sigma^2}} \right) \right] \\
+&=& \arg\max_w \sum_{i=1}^n \left[  \log \left(e^{-\frac{(x_i^Tw - y_i)^2}{2\sigma^2}} \right) \right] \\
+&=& \arg\max_w \sum_{i=1}^n -\frac{(x_i^Tw - y_i)^2}{2\sigma^2}\\
+&=&  \arg\max_w - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i^Tw - y_i)^2\\
+\end{alignat*}
+$$
+
+Instead of maximizing a negative function, we can minimize a positive one.
+$$
+\hat{w} = \arg\min_w \sum_{i=1}^n (x_i^Tw - y_i)^2\\
+$$
+
+Averaging across all data points gives us the Squared Loss Function:
+$$
+w = \arg\min_w \frac{1}{n} \sum_{i=1}^n (x_i^Tw - y_i)^2
+$$
+$$
+l(w) = \frac{1}{n}\sum_{i=1}^n(x_i^Tw-y_i)^2
+$$
+
+Since our $w$ parameter is a vector we will find the partial first derivative of $l$ with respect to (w.r.t.) $w$:
+$$
+\begin{align*}
+\frac{\partial l}{\partial w} &=& \frac{\partial}{\partial w} \left[ \frac{1}{n}\sum_{i=1}^n(x_i^Tw-y_i)^2 \right] \\
+&=& \frac{1}{n} \sum_{i=1}^n 2(x^T_iw - y_i)(x_i^T-0)\\
+&=& \frac{2n}{n} \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
+&=& 2 \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
+\end{align*}
+$$
+Set it to Zero:
+$$
+\begin{align*}
+\frac{\partial l}{\partial w} &=& 0 \\
+0 &=& 2 \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
+0 &=& 2 \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
+0 &=& \sum_{i=1}^n (x^T_iw)(x_i) - (y_i^Tx_i)\\
+0 &=& \sum_{i=1}^n (x^T_iw)(x_i) - \sum_{i=1}^n (y_i^Tx_i)\\
+\sum_{i=1}^n (x^T_iw)(x_i) &=& \sum_{i=1}^n (y_i^Tx_i)\\
+w \sum_{i=1}^n x^T_ix_i &=& \sum_{i=1}^n y_i^Tx_i\\
+\end{align*}
+$$
+Solve for $w$:
+$$
+w  = \frac{\sum_{i=1}^n y_i^Tx_i}{\sum_{i=1}^n x^T_ix_i}
+$$
+
+This is a **Closed-form solution** for $w$. 
+Computational speed ups can be made with the following equation: 
+$$
+w=(X^⊤X)^{−1}X^⊤y
+$$
+
+where $X$ is a matrix of shape $(n,d)$ for $n$ data samples and $d$ features. 
+
+**Exercise:** Prove the equation above. 
+**Exercise:** The inverse operation is numerically unstable. What would you do to fix this issue?
+
+# MLE for Logistic Regression
+
+Logistic Regression leverages the Naive Bayes assumption while employing the sigmoid function as a probability density function. It performs better with large datasets because it does not rely on prior knowledge about the underlying data distribution unlike the [Naive Bayes Classifier model](https://en.wikipedia.org/wiki/Naive_Bayes_classifier).
+
+The relationship is expressed as:
+$$
+P(y|x) = \frac{1}{1+e^{-y(w^Tx+b)}}
+$$
+The sigmoid function has the domain of all real values and a range between $0$ and $1$, making it suitable for mapping outputs to probability values.
+
+### MLE with the sigmoid function
+
+In our logistic regression model, the parameters $w$ $w$ and $b$ need to be optimized.  $w$, as with our linear model is the weights vector, and $b$ is our bias scalar value. 
+
+The likelihood is the product of all probabilities across all $n$ observations:
+$$
+\begin{align*}
+\hat{w} &=& \arg\max_w \prod_{i=1}^n P(y_i|x_i; w)\\
+&=& \arg\max_w \sum_{i=1}^n \log \left[ \frac{1}{1+e^{-y_i (w^Tx+b)}} \right] \\
+\end{align*}
+$$
+
+Simplifying the equation gives us the following:
+$$
+\begin{align*}
+\hat{w} &=& \arg\max_w \sum_{i=1}^n \log(1) - \log \left(1+e^{-y_i (w^Tx+b)}\right) \\
+&=& \arg\max_w - \sum_{i=1}^n \log \left( 1+e^{-y_i (w^Tx_i+b)} \right) \\
+&=& \arg\min_w \sum_{i=1}^n  \log \left(1+e^{-y_i (w^Tx_i+b)}\right)  \\
+\end{align*}
+$$
+
+We can represent it with the sigmoid function:
+$$
+\begin{align*}
+\hat{w} &=& \underset{w}{\arg\min} - \sum_{i=1}^n \log \left(\sigma ( y_i (w^T x_i+b) ) \right)
+\end{align*}
+$$
+
+This gives us the negative log-likelihood loss function: 
+$$
+l(w,b) =  - \sum_{i=1}^n \log \left(\sigma ( y_i (w^T x_i+b) ) \right)
+$$
+First derivative w.r.t. $w$:
+$$
+\begin{align*}
+\frac{\partial l}{\partial w} &=& \frac{\partial}{\partial w} \left[\sum_{i=1}^n \log \left(\sigma(y_i(w^Tx_i+b)) \right)  \right] \\
+\end{align*}
+$$
+
+Solve via **Chain Rule** and simplify:
+$$
+\begin{align*}
+\frac{\partial l}{\partial w} &=& \sum_{i=1}^n\frac{\partial}{\partial w} \left[ \log \left(\sigma(y_i(w^Tx_i+b)) \right)  \right] \\
+
+&=& \sum_{i=1}^n \frac{1}{\sigma(y_i(w^Tx_i+b))}\cdot  \frac{\partial}{\partial w} \left[ \sigma \left(y_i(w^Tx_i+b) \right)  \right] \\
+&=& \sum_{i=1}^n \frac{1}{\sigma(y_i(w^Tx_i+b))}\cdot  \sigma^{'} \left(y_i(w^Tx_i+b) \right) \cdot \frac{\partial}{\partial w}  \left[ y_i(w^Tx_i+b)  \right] \\
+&=& \sum_{i=1}^n \frac{\sigma(y_i(w^Tx_i+b)) \left(1-\sigma (y_i(w^Tx_i+b))\right)}{\sigma(y_i(w^Tx_i+b))} (y_ix_i) \\
+&=& \sum_{i=1}^n \left[1-\sigma (y_i\cdot (w^Tx_i+b))\right]\cdot y_ix_i \\
+\end{align*}
+$$
+Note: $\frac{\partial}{\partial z} \sigma(z) = \sigma(z)(1-\sigma(z))$ . 
+
+First derivative w.r.t. $b$:
+
+$$
+\begin{align*}
+\frac{dl}{db} &=& \frac{d}{db} \left[\sum_{i=1}^n \log \left(\sigma(y_i(w^Tx_i+b)) \right)  \right] \\
+&=& \sum_{i=1}^n \left[1-\sigma (y_i\cdot (w^Tx_i+b))\right]\cdot y_i\\
+\end{align*}
+$$
+
+The key difference between the two derivatives is and extra $x_i$ term for $w$. 
+
+Obtaining a closed form for the MLE is not feasible due to the non-linearity of the sigmoid function. Setting it to $0$ and solving for $w$ and $b$ respectively does not have a closed form solution. 
+
+Instead, **Gradient Descent** is used to iteratively calculate the optimal values for $w$ and $b$. 
+
+# What is Gradient Descent?
+
+Gradient Descent is an optimization algorithm that iteratively finds the global minimum of a target function. It begins by making an initial guess for the model parameters and then updates the guess by moving in the opposite direction of the gradient. 
+
+For logistic regression, it can be mathematically proven that gradient descent will always converge to the global minimum. However, this is not guaranteed for all functions. The reason gradient descent works for linear and logistic regression is that these models are convex, meaning they have a single global minimum. In contrast, for non-convex models, the algorithm can get trapped in a local minimum instead of reaching the global one.
+
+**Exercise**: Prove that the loss function $l(w,b)$ for logistic regression is convex. 
+
+A function is convex if the following is true: 
+1. it is has a first derivative
+2. it has a second derivative
+3. the second derivative is non-negative in its entire domain. 
+
+## Gradient descent Algorithm
+
+**Input**:
+* Time step $T$
+* learning rate $\alpha$  
+
+**Step 1**: 
+* initialize the model parameters (vector $w$, and scalar $b$) randomly
+
+**Step 2**: 
+* for each time step $t$ from $0\ldots (T-1)$:
+    * compute the gradient of the loss function w.r.t each model parameter:
+$$
+g(w) = - \frac{\partial l(w,b)}{\partial w$} \text{ and } g(b) = \frac{-d l(w,b)}{db}
+$$
+    * Update the model parameters by moving in the direction opposite to the gradients, scaled by the learning rate:
+$$
+w = w − \alpha g(w) \text{ and } b = b−\alpha g(b)
+$$
+**Output**:
+* model parameters $w$ and $b$
+
+## Why do we scale the gradients by the learning rate?
+The learning rate $\alpha$ is used to scale the gradients to control the step size taken toward the optimal solution. It is necessary for many reasons. 
+
+**Control the Size of Updates**: The update gradients, to the model parameters, could be too large or too small, making the optimization unstable or inefficient. 
+* If the step size is too large, you might overshoot the optimal values, missing the minimum. 
+* If it's too small, the optimization process will be slow, requiring many iterations to converge.
+
+**Normalization across model Parameters**: The gradients could have different magnitudes. Scaling by the learning rate helps balance the updates for each parameter. 
+* This ensures that each parameter is updated proportionally, leading to better optimization across all parameters.
+
+
+# Conclusion
+
+In this blog, we explored the concept of Maximum Likelihood Estimation (MLE) and its role in finding the global minimum for convex functions. We applied this technique to three different models, illustrating its effectiveness in optimizing model parameters. 
+
+In the next blog, we will dive deeper into the practical application of the Gradient Descent algorithm, examining how it is used to find the optimal parameters for the logistic regression model and how it can be fine-tuned for real-world problems.
+
+{/* Line below needs to be empty */}
+
+export default function MDXPage({ children }) {
+  return <Layout>{children}</Layout>
+ 
+}

@@ -43,7 +43,9 @@ Consider an experiment where a coin is tossed 20 times, and we observe the numbe
 
 The Binomial Distribution is a discrete distribution that describes the probability of obtaining an successful outcome from independent trials. 
 $$
+\begin{align}
 P(x=k;p) = {n \choose k}p^k(1-p)^{n-k}
+\end{align}
 $$
 In our coin toss experiment, we have $n=20$ trials, and the observation $k$ is the amount of times we see heads. The model parameter we want to find is $p$ the probability of getting heads vs tails. 
 
@@ -78,8 +80,8 @@ The MLE looks at how the probability density function changes with respect to $\
 
 $$
 \begin{align*}
-\frac{d P(D|\theta)}{d\theta} &=& \frac{d}{d\theta} \left[ \log {n_H + n_T \choose n_H} + n_H \log \theta + n_T \log (1-\theta) \right]\\
-&=& \frac{d}{d\theta} \left[ \log {n_H + n_T \choose n_H} \right] + \frac{d}{d\theta} [ n_H \log \theta ] + \frac{d}{d\theta} [ n_T \log (1-\theta)]\\
+\frac{d P(D|\theta)}{d\theta} =& \frac{d}{d\theta} \left[ \log {n_H + n_T \choose n_H} + n_H \log \theta + n_T \log (1-\theta) \right]\\
+=& \frac{d}{d\theta} \left[ \log {n_H + n_T \choose n_H} \right] + \frac{d}{d\theta} [ n_H \log \theta ] + \frac{d}{d\theta} [ n_T \log (1-\theta)]\\
 \end{align*}
 $$
 
@@ -138,10 +140,10 @@ $$
 Simplifying gives us the following:
 $$
 \begin{alignat*}{2}
-\hat{w} &=& \arg\max_w \sum_{i=1}^n \left[ \log \left(\frac{1}{\sqrt{2\pi \sigma^2}} \right) + \log \left(e^{-\frac{(x_i^Tw - y_i)^2}{2\sigma^2}} \right) \right] \\
-&=& \arg\max_w \sum_{i=1}^n \left[  \log \left(e^{-\frac{(x_i^Tw - y_i)^2}{2\sigma^2}} \right) \right] \\
-&=& \arg\max_w \sum_{i=1}^n -\frac{(x_i^Tw - y_i)^2}{2\sigma^2}\\
-&=&  \arg\max_w - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i^Tw - y_i)^2\\
+\hat{w} =& \arg\max_w \sum_{i=1}^n \left[ \log \left(\frac{1}{\sqrt{2\pi \sigma^2}} \right) + \log \left(e^{-\frac{(x_i^Tw - y_i)^2}{2\sigma^2}} \right) \right] \\
+=& \arg\max_w \sum_{i=1}^n \left[  \log \left(e^{-\frac{(x_i^Tw - y_i)^2}{2\sigma^2}} \right) \right] \\
+=& \arg\max_w \sum_{i=1}^n -\frac{(x_i^Tw - y_i)^2}{2\sigma^2}\\
+=&  \arg\max_w - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i^Tw - y_i)^2\\
 \end{alignat*}
 $$
 
@@ -155,45 +157,52 @@ $$
 w = \arg\min_w \frac{1}{n} \sum_{i=1}^n (x_i^Tw - y_i)^2
 $$
 $$
+\begin{align}
 l(w) = \frac{1}{n}\sum_{i=1}^n(x_i^Tw-y_i)^2
+\end{align}
 $$
 
 Since our $w$ parameter is a vector we will find the partial first derivative of $l$ with respect to (w.r.t.) $w$:
 $$
 \begin{align*}
-\frac{\partial l}{\partial w} &=& \frac{\partial}{\partial w} \left[ \frac{1}{n}\sum_{i=1}^n(x_i^Tw-y_i)^2 \right] \\
-&=& \frac{1}{n} \sum_{i=1}^n 2(x^T_iw - y_i)(x_i^T-0)\\
-&=& \frac{2n}{n} \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
-&=& 2 \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
+\frac{\partial l}{\partial w} =& \frac{\partial}{\partial w} \left[ \frac{1}{n}\sum_{i=1}^n(x_i^Tw-y_i)^2 \right] \\
+=& \frac{1}{n} \sum_{i=1}^n 2(x^T_iw - y_i)(x_i^T-0)\\
+=& \frac{2n}{n} \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
+=& 2 \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
 \end{align*}
 $$
 Set it to Zero:
 $$
 \begin{align*}
-\frac{\partial l}{\partial w} &=& 0 \\
-0 &=& 2 \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
-0 &=& 2 \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
-0 &=& \sum_{i=1}^n (x^T_iw)(x_i) - (y_i^Tx_i)\\
-0 &=& \sum_{i=1}^n (x^T_iw)(x_i) - \sum_{i=1}^n (y_i^Tx_i)\\
-\sum_{i=1}^n (x^T_iw)(x_i) &=& \sum_{i=1}^n (y_i^Tx_i)\\
-w \sum_{i=1}^n x^T_ix_i &=& \sum_{i=1}^n y_i^Tx_i\\
+\frac{\partial l}{\partial w} =& 0 \\
+0 =& 2 \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
+=& 2 \sum_{i=1}^n (x^T_iw - y_i)(x_i^T)\\
+=& \sum_{i=1}^n (x^T_iw)(x_i) - (y_i^Tx_i)\\
+=& \sum_{i=1}^n (x^T_iw)(x_i) - \sum_{i=1}^n (y_i^Tx_i)\\
+\sum_{i=1}^n (x^T_iw)(x_i) =& \sum_{i=1}^n (y_i^Tx_i)\\
+w \sum_{i=1}^n x^T_ix_i =& \sum_{i=1}^n y_i^Tx_i\\
 \end{align*}
 $$
 Solve for $w$:
 $$
+\begin{align}
 w  = \frac{\sum_{i=1}^n y_i^Tx_i}{\sum_{i=1}^n x^T_ix_i}
+\end{align}
 $$
 
 This is a **Closed-form solution** for $w$. 
 Computational speed ups can be made with the following equation: 
 $$
+\begin{align}
 w=(X^⊤X)^{−1}X^⊤y
+\end{align}
 $$
 
 where $X$ is a matrix of shape $(n,d)$ for $n$ data samples and $d$ features. 
 
-**Exercise:** Prove the equation above. 
-**Exercise:** The inverse operation is numerically unstable. What would you do to fix this issue?
+**Exercise**: Prove the equation above.
+
+**Exercise**: The inverse operation is numerically unstable. What would you do to fix this issue?
 
 # MLE for Logistic Regression
 
@@ -201,7 +210,9 @@ Logistic Regression leverages the Naive Bayes assumption while employing the sig
 
 The relationship is expressed as:
 $$
+\begin{align}
 P(y|x) = \frac{1}{1+e^{-y(w^Tx+b)}}
+\end{align}
 $$
 The sigmoid function has the domain of all real values and a range between $0$ and $1$, making it suitable for mapping outputs to probability values.
 
@@ -212,25 +223,23 @@ In our logistic regression model, the parameters $w$ $w$ and $b$ need to be opti
 The likelihood is the product of all probabilities across all $n$ observations:
 $$
 \begin{align*}
-\hat{w} &=& \arg\max_w \prod_{i=1}^n P(y_i|x_i; w)\\
-&=& \arg\max_w \sum_{i=1}^n \log \left[ \frac{1}{1+e^{-y_i (w^Tx+b)}} \right] \\
+\hat{w} =& \arg\max_w \prod_{i=1}^n P(y_i|x_i; w)\\
+=& \arg\max_w \sum_{i=1}^n \log \left[ \frac{1}{1+e^{-y_i (w^Tx+b)}} \right] \\
 \end{align*}
 $$
 
 Simplifying the equation gives us the following:
 $$
 \begin{align*}
-\hat{w} &=& \arg\max_w \sum_{i=1}^n \log(1) - \log \left(1+e^{-y_i (w^Tx+b)}\right) \\
-&=& \arg\max_w - \sum_{i=1}^n \log \left( 1+e^{-y_i (w^Tx_i+b)} \right) \\
-&=& \arg\min_w \sum_{i=1}^n  \log \left(1+e^{-y_i (w^Tx_i+b)}\right)  \\
+\hat{w} =& \arg\max_w \sum_{i=1}^n \log(1) - \log \left(1+e^{-y_i (w^Tx+b)}\right) \\
+=& \arg\max_w - \sum_{i=1}^n \log \left( 1+e^{-y_i (w^Tx_i+b)} \right) \\
+=& \arg\min_w \sum_{i=1}^n  \log \left(1+e^{-y_i (w^Tx_i+b)}\right)  \\
 \end{align*}
 $$
 
 We can represent it with the sigmoid function:
 $$
-\begin{align*}
-\hat{w} &=& \underset{w}{\arg\min} - \sum_{i=1}^n \log \left(\sigma ( y_i (w^T x_i+b) ) \right)
-\end{align*}
+\hat{w} = \underset{w}{\arg\min} - \sum_{i=1}^n \log \left(\sigma ( y_i (w^T x_i+b) ) \right)
 $$
 
 This gives us the negative log-likelihood loss function: 
@@ -239,31 +248,37 @@ l(w,b) =  - \sum_{i=1}^n \log \left(\sigma ( y_i (w^T x_i+b) ) \right)
 $$
 First derivative w.r.t. $w$:
 $$
-\begin{align*}
-\frac{\partial l}{\partial w} &=& \frac{\partial}{\partial w} \left[\sum_{i=1}^n \log \left(\sigma(y_i(w^Tx_i+b)) \right)  \right] \\
-\end{align*}
+\frac{\partial l}{\partial w} = \frac{\partial}{\partial w} \left[\sum_{i=1}^n \log \left(\sigma(y_i(w^Tx_i+b)) \right)  \right]
 $$
 
 Solve via **Chain Rule** and simplify:
 $$
 \begin{align*}
-\frac{\partial l}{\partial w} &=& \sum_{i=1}^n\frac{\partial}{\partial w} \left[ \log \left(\sigma(y_i(w^Tx_i+b)) \right)  \right] \\
-
-&=& \sum_{i=1}^n \frac{1}{\sigma(y_i(w^Tx_i+b))}\cdot  \frac{\partial}{\partial w} \left[ \sigma \left(y_i(w^Tx_i+b) \right)  \right] \\
-&=& \sum_{i=1}^n \frac{1}{\sigma(y_i(w^Tx_i+b))}\cdot  \sigma^{'} \left(y_i(w^Tx_i+b) \right) \cdot \frac{\partial}{\partial w}  \left[ y_i(w^Tx_i+b)  \right] \\
-&=& \sum_{i=1}^n \frac{\sigma(y_i(w^Tx_i+b)) \left(1-\sigma (y_i(w^Tx_i+b))\right)}{\sigma(y_i(w^Tx_i+b))} (y_ix_i) \\
-&=& \sum_{i=1}^n \left[1-\sigma (y_i\cdot (w^Tx_i+b))\right]\cdot y_ix_i \\
+\frac{\partial l}{\partial w} =& \sum_{i=1}^n\frac{\partial}{\partial w} \left[ \log \left(\sigma(y_i(w^Tx_i+b)) \right)  \right] \\
+=& \sum_{i=1}^n \frac{1}{\sigma(y_i(w^Tx_i+b))}\cdot  \frac{\partial}{\partial w} \left[ \sigma \left(y_i(w^Tx_i+b) \right)  \right] \\
+=& \sum_{i=1}^n \frac{1}{\sigma(y_i(w^Tx_i+b))}\cdot  \sigma^{'} \left(y_i(w^Tx_i+b) \right) \cdot \frac{\partial}{\partial w}  \left[ y_i(w^Tx_i+b)  \right] \\
+=& \sum_{i=1}^n \frac{\sigma(y_i(w^Tx_i+b)) \left(1-\sigma (y_i(w^Tx_i+b))\right)}{\sigma(y_i(w^Tx_i+b))} (y_ix_i) \\
+=& \sum_{i=1}^n \left[1-\sigma (y_i\cdot (w^Tx_i+b))\right]\cdot y_ix_i \\
 \end{align*}
 $$
-Note: $\frac{\partial}{\partial z} \sigma(z) = \sigma(z)(1-\sigma(z))$ . 
+
+**Note 1**: $\frac{\partial}{\partial z} \sigma(z) = \sigma(z)(1-\sigma(z))$.
+
+**Note 2**: $\sigma(-z) = 1-\sigma(z)$.
+
+$$
+\begin{align}
+\frac{\partial l}{\partial w} = \sum_{i=1}^n \left[\sigma (- y_i\cdot (w^Tx_i+b))\right]\cdot y_ix_i
+\end{align}
+$$
 
 First derivative w.r.t. $b$:
 
 $$
-\begin{align*}
-\frac{dl}{db} &=& \frac{d}{db} \left[\sum_{i=1}^n \log \left(\sigma(y_i(w^Tx_i+b)) \right)  \right] \\
-&=& \sum_{i=1}^n \left[1-\sigma (y_i\cdot (w^Tx_i+b))\right]\cdot y_i\\
-\end{align*}
+\begin{align}
+\frac{dl}{db} =& \frac{d}{db} \left[\sum_{i=1}^n \log \left(\sigma(y_i(w^Tx_i+b)) \right)  \right] \nonumber \\
+=& \sum_{i=1}^n \left[\sigma (-y_i\cdot (w^Tx_i+b))\right]\cdot y_i\\
+\end{align}
 $$
 
 The key difference between the two derivatives is and extra $x_i$ term for $w$. 

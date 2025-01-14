@@ -40,25 +40,25 @@ def get_document_similarities(model, documents: List[str]):
 def get_document_similarities_faster(model, documents: List[str]):
     similarities = [[0 for _ in range(len(documents))] 
                     for _ in range((len(documents)))]
-\tfor i, doc1 in enumerate(documents):
-\t\tdoc1_enc = model.encode(doc1)
-\t\tfor j, doc2 in enumerate(documents):
-\t\t\tif i == j:
-\t\t\t\tsimilarities[i][j] = 1
-\t\t\telif i>j:
-\t\t\t\tdoc2_enc = model.encode(doc2)
-\t\t\t\tsim = get_cosine_similarity(doc1_enc, doc2_enc)
-\t\t\t\tsimilarities[i][j] = sim
-\t\t\t\tsimilarities[j][i] = sim
-\t\t\telif i<j:
-\t\t\t\tcontinue
-\treturn similarities
+    for i, doc1 in enumerate(documents):
+      doc1_enc = model.encode(doc1)
+      for j, doc2 in enumerate(documents):
+          if i == j:
+            similarities[i][j] = 1
+          elif i>j:
+            doc2_enc = model.encode(doc2)
+            sim = get_cosine_similarity(doc1_enc, doc2_enc)
+            similarities[i][j] = sim
+            similarities[j][i] = sim
+          elif i<j:
+            continue
+    return similarities
 def cosine_similarity_matrix(model, documents: List[str]):
-\tdocument_encodings = model.encode(documents)
-\tnumerator = np.matmul(document_encodings, document_encodings.T)
-\trow_sum = np.sqrt(np.sum(np.square(document_encodings), axis=1, keepdims=True))
-\tdenominator = np.matmul(row_sum, row_sum.T)
-\treturn numerator / denominator # will be done elementwise
+    document_encodings = model.encode(documents)
+    numerator = np.matmul(document_encodings, document_encodings.T)
+    row_sum = np.sqrt(np.sum(np.square(document_encodings), axis=1, keepdims=True))
+    denominator = np.matmul(row_sum, row_sum.T)
+    return numerator / denominator # will be done elementwise
 ```
 We will use the quora dataset to compare the timings to solidify the theory behind our understanding of the time complexities of each algorithm.
 

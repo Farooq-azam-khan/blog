@@ -45,8 +45,9 @@ Sentence
 
 Higher relevance is given to words that ppear more often across many sentences. The formula below calculates this frequency.
 
-<BlockMath math="tf_{i,j} = \frac{n_{i,j}}{\sum_{k=1}^{K} n_{k,j}}" />
-
+$$
+\text{tf}_{i,j} = \frac{n_{i,j}}{\sum_{k=1}^{K} n_{k,j}}
+$$
 where <InlineMath math="i"/> referes to the index of the sentence and <InlineMath math="j"/> refers to the index of the word at the <InlineMath math="j" />'th position.
 
 # IDF
@@ -54,16 +55,18 @@ Now that we have calculated the frequency of each word within a sentence, we mus
 
 Think of a spam email classfier. The word \"urgent! click here!\" would have a high term frequency within the email; however, across all the emails you have received these words will have a low frequency. The purpose of inverse document frequency is to drown out the words in documents that do not appear in other documents.
 
-The formula for calculating <InlineMath math="idf"/> is 
+The formula for calculating $\text{idf}$ is 
 
-<BlockMath math="idf(w) = \log(\frac{N}{df_t})" />
-
-where <InlineMath math="df_t" /> is the number of documents that contain the word <InlineMath math="w"/>. E.g. <InlineMath math="df('big') = 1" />. Also, <InlineMath math="N"/> 
-is the number of words in our list. For our toy example,<InlineMath math="N=9"/>. 
+$$
+\text{idf}(w) = \log(\frac{N}{\text{df}_t})
+$$
+where $\text{df}_t$ is the number of documents that contain the word $w$. E.g. $\text{df}('big') = 1$. Also, $N$ is the number of words in our list. For our toy example, $N=9$. 
 
 # Putting it all Together, TFIDF
-The last step is to get the <InlineMath math="tfidf" />. We simply multiply the <InlineMath math="tf" /> and the <InlineMath math="idf" />. 
-<BlockMath math="tfidf_{i,j}(word) = tf_{i,j}\\cdot idf(word)" />
+The last step is to get the $\text{tfidf}$. We simply multiply the $\text{tf}$ and the $\text{idf}$. 
+$$
+\text{tfidf}_{i,j}(\text{word}) = \text{tf}_{i,j} \cdot \text{idf}(\text{word})
+$$
 
 ```python 
 from sklearn.feature_extraction.text import TfidfVectorizer

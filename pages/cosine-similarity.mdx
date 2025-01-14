@@ -166,9 +166,9 @@ Sum all rows in the <InlineMath math="A^2"/> matrix and set the resulting vector
    |x| \\
    |y|
 \end{bmatrix}" />
-The computation of <InlineMath math="b \\cdot b^T" /> is the resulting matrix for magnitudes of each pair of vectors.
-
-<BlockMath math="B = \begin{bmatrix}
+The computation of $b \cdot b^T$ is the resulting matrix for magnitudes of each pair of vectors.
+$$
+B = \begin{bmatrix}
    |x| \\
    |y|
 \end{bmatrix} \cdot \begin{bmatrix}
@@ -177,8 +177,8 @@ The computation of <InlineMath math="b \\cdot b^T" /> is the resulting matrix fo
 \end{bmatrix} = \begin{bmatrix}
    |x|^2 & |y|\cdot |x| \\
    |x|\cdot |y| & |y|^2
-\end{bmatrix}"/>
-
+\end{bmatrix}
+$$
 Finally the resulting similarity matrix is the element wise multiplication of our <InlineMath math="A" /> matrix and our reciprocal <InlineMath math="\frac{1}{B}" /> matrix.
 <BlockMath math="S = A \circledast \frac{1}{B}"/>
 Cosine similarity of all sentences. Loose redundancy and repetition; however, when performing matrix batch operations (which have been heavily optimized) is much faster.

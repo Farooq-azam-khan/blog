@@ -63,7 +63,7 @@ labes shape torch.Size([1000, 1])
 '''
 ```
 
-![[multivariate-plot.png]]
+![multivariate-plot.png](multivariate-plot.png)
 
 # Sigmoid Function Implementation 
 
@@ -206,7 +206,7 @@ plt.ylabel("Feature 2", size=13);
 plt.grid();
 ```
 
-![[sigmoid-of-features.png]]
+![sigmoid-of-features.png](sigmoid-of-features.png)
 The sigmoid function compresses all values into the range $[0,1]$ on both axes, creating a bounded feature space. Second, the transformation has created an interesting asymmetry in our class distribution. The points labeled as -1 are concentrated in the upper-right region of the plot, appearing more densely clustered. In contrast, the points labeled as 1 exhibit a more dispersed distribution across the transformed space.
 
 # Logistic Regression Forward Pass 
@@ -474,10 +474,10 @@ ax2.plot(accurary_over_iter, color="tab:blue")
 ax2.set_ylabel('Accuracy')
 ```
 
-![[gradient-descent-5itr.png]]
+![gradient-descent-5itr.png](gradient-descent-5itr.png)
 Graph of our feature space shows that the model is having some difficulty classifying labels with high variance. 
 
-![[logsitic-regression-10.png]]
+![logsitic-regression-10.png](logsitic-regression-10.png)
 ## Logistic Regression Training Function
 
 ```python
@@ -518,13 +518,15 @@ Accuracy 0.9690 (want close to 1) Negative Log Loss Sum: 11220.8330 (want close 
 ```
 
 Graph:
-![[logistic-regression-1k.png]]
+![logistic-regression-1k.png](logistic-regression-1k.png)
 
 # Conclusion
 
 In this post, we explored the forward and backward passes of logistic regression, derived gradients, and implemented gradient descent to train our model. Through this process, we translated theory into practice, iteratively deepening our understanding of logistic regression.
 
 Additionally, we refactored our code to make our experiments reproducible. By adjusting parameters, we observed improvements in accuracy and reductions in loss. Visualizing the results confirmed that our model was learning effectively.
+
+Check out this [github repo](https://github.com/Farooq-azam-khan/logistic-regression) for the code written in this blog.
 
 
 {/* Line below needs to be empty */}

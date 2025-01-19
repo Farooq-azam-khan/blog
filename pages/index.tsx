@@ -1,15 +1,22 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
 
-export const mle_metadata = { 
-  title : "Importance of Maximum Likelihood Estimation for Machine Learning", 
-  published_date : { month : "January", date : "11th", year : 2025 }
-  , summary : "In this blog post I explain how the Maximum Likelihood Estimator is used in Machine Learning."
-  , post_link : "/mle"
+export const mle_metadata = {
+  title: "Importance of Maximum Likelihood Estimation for Machine Learning",
+  published_date: { month: "January", date: "11th", year: 2025 },
+  summary:
+    "In this blog post I explain how the Maximum Likelihood Estimator is used in Machine Learning.",
+  post_link: "/mle",
 };
 
 // TODO: dynamically render meta data
 const blog_metadata: any[] = [
+  {
+    title: "Logistic Regression with Gradient Descent",
+    published_date: { month: "January", date: "19th", year: 2025 },
+    summary: "Details on how the gradient decent algorithm is implemented.",
+    post_link: "/logistic-regression-with-gradient-descent",
+  },
   mle_metadata,
   {
     title: "Term Frequency-Inverse Document Frequency",

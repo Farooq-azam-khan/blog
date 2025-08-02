@@ -24,7 +24,7 @@ export const meta = {
 - Agent takes actions, receives rewards, and transitions into states.
 - Objective: maximize cumulative reward over episodes.
 - Formally modeled as a Markov Decision Process (MDP).
-  - Great visual intro: [Veritasium video on MDP](https://www.youtube.com/watch?v=KZeIEiBrT_w)
+  - Great visual intro: <a href="https://www.youtube.com/watch?v=KZeIEiBrT_w" target="_blank">Veritasium video on MDP</a>
 
 ## Policies: The Agent’s Strategy
 
@@ -35,6 +35,7 @@ export const meta = {
 - Better policies lead to higher total rewards.
 
 ### Example: Agent in a Maze
+
 - Maze = 2D grid; each cell is a state.
 - Actions: up, down, left, right.
 - Rewards:
@@ -70,10 +71,12 @@ export const meta = {
 - Define the problem: Set up states, actions, and rewards.
 - Evaluate a policy: Understand how good the current strategy is.
     *Improve the policy: Make smarter decisions based on value.
-    * Repeat until convergence.
+  - Repeat until convergence.
 
 ## Final Thoughts
 
 - RL is powerful because of its simplicity: learn by interacting.
   - Sutton & Barto distill it into fundamental ideas—elegant, even if the math gets heavy.
   - At its core: define, evaluate, improve, repeat.
+
+export default ({children}) => <Layout meta={meta}>{children}</Layout>

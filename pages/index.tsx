@@ -12,6 +12,12 @@ export const mle_metadata = {
 // TODO: dynamically render meta data
 const blog_metadata: any[] = [
   {
+    title: "RL in a Nutshell",
+    published_date: { month: "Aug", date: "2nd", year: 2025 }
+    , summary: "Reinforcement learning is about an agent learning to make better decisions through trial and error to maximize long-term rewards. What does that entail in practice?"
+    , post_link: "rl-in-a-nutshell"
+  },
+  {
     title: "Logistic Regression with Gradient Descent",
     published_date: { month: "January", date: "19th", year: 2025 },
     summary: "Details on how the gradient decent algorithm is implemented.",

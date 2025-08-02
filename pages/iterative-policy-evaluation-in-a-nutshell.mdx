@@ -1,3 +1,14 @@
+import Layout from '../components/Layout.tsx'
+
+import { InlineMath, BlockMath } from 'react-katex';
+
+export const meta = {
+    title : "Iterative Policy Evaluation in a Nutshell",
+    published_date : { month : "Aug", date : "3rd", year : 2025 }
+    , summary : "Check if an agent is doing the right thing with Policy Evaluation Methods"
+    , post_link : "iterative-policy-evaluation-in-a-nutshell"
+}
+
 # Iterative Policy Evaluation in a Gridworld
 
 In this post, we explore **policy evaluation** — a key step in reinforcement learning that allows us to determine how good a given policy is. Using a simple maze environment, we demonstrate how **iterative policy evaluation** helps compute the expected return (value) of each state under different policies, and how this lays the groundwork for **policy improvement**.
@@ -5,14 +16,60 @@ In this post, we explore **policy evaluation** — a key step in reinforcement l
 ## Gridworld Setup
 
 We define a 5x5 grid environment with actions, `UP`, `DOWN`, `LEFT`, `RIGHT`:
-
-|     |  0  |  1  |  2  |  3  |  4  |
-|-----|-----|-----|-----|-----|-----|
-|  0  |  S  |  .  |  .  |  X  |  G  |
-|  1  |  .  |  X  |  .  |  X  |  .  |
-|  2  |  .  |  X  |  .  |  .  |  .  |
-|  3  |  .  |  .  |  .  |  X  |  .  |
-|  4  |  X  |  X  |  .  |  .  |  .  |
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>S</td>
+      <td>.</td>
+      <td>.</td>
+      <td>X</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>.</td>
+      <td>X</td>
+      <td>.</td>
+      <td>X</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>.</td>
+      <td>X</td>
+      <td>.</td>
+      <td>.</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>.</td>
+      <td>.</td>
+      <td>.</td>
+      <td>X</td>
+      <td>.</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>X</td>
+      <td>X</td>
+      <td>.</td>
+      <td>.</td>
+      <td>.</td>
+    </tr>
+  </tbody>
+</table>
 
 ```python
 # Constants for actions
@@ -285,3 +342,7 @@ State (4, 4): V = 0.00
 * **Iterative policy evaluation** refines these values over time.
 * By updating the policy to choose actions that **maximize future rewards**, we can move toward optimal behavior.
 * **Exercise**: Use the Bellman Optimality Equation to solve this using a system of linear equations. Do you get the same values for each policy?
+
+
+
+export default ({children}) => <Layout meta={meta}>{children}</Layout>

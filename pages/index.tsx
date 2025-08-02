@@ -12,6 +12,12 @@ export const mle_metadata = {
 // TODO: dynamically render meta data
 const blog_metadata: any[] = [
   {
+    title: "Iterative Policy Evaluation in a Nutshell",
+    published_date: { month: "Aug", date: "3rd", year: 2025 }
+    , summary: "Check if an agent is doing the right thing with Policy Evaluation Methods"
+    , post_link: "iterative-policy-evaluation-in-a-nutshell"
+  },
+  {
     title: "RL in a Nutshell",
     published_date: { month: "Aug", date: "2nd", year: 2025 }
     , summary: "Reinforcement learning is about an agent learning to make better decisions through trial and error to maximize long-term rewards. What does that entail in practice?"

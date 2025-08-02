@@ -1,0 +1,79 @@
+import Layout from '../components/Layout.tsx'
+
+import { InlineMath, BlockMath } from 'react-katex';
+
+export const meta = {
+    title : "RL in a Nutshell",
+    published_date : { month : "Aug", date : "2nd", year : 2025 }
+    , summary : "Reinforcement learning is about an agent learning to make better decisions through trial and error to maximize long-term rewards. What does that entail in practice?"
+    , post_link : "rl-in-a-nutshell"
+}
+
+# Understanding Reinforcement Learning: A High-Level Overview
+
+## Background & Motivation
+
+- Reading _Reinforcement Learning: An Introduction_ by Sutton and Barto.
+- Book is dense but incredibly rewarding—complex ideas are simplified into core principles.
+- Writing this post to summarize and solidify understanding of Part 1 (core RL concepts).
+- Not a replacement for the book, just a high-level overview.
+
+## What is Reinforcement Learning?
+
+- Involves an agent interacting with an environment over time.
+- Agent takes actions, receives rewards, and transitions into states.
+- Objective: maximize cumulative reward over episodes.
+- Formally modeled as a Markov Decision Process (MDP).
+  - Great visual intro: [Veritasium video on MDP](https://www.youtube.com/watch?v=KZeIEiBrT_w)
+
+## Policies: The Agent’s Strategy
+
+- A **policy** defines the agent's behavior—how it picks actions in each state.
+- Can be:
+  - **Deterministic** (e.g., always move left).
+  - **Stochastic** (e.g., 25% chance of each direction).
+- Better policies lead to higher total rewards.
+
+### Example: Agent in a Maze
+- Maze = 2D grid; each cell is a state.
+- Actions: up, down, left, right.
+- Rewards:
+- -1 for each step.
+- +1 for reaching the goal (terminal state).
+- Hitting walls → agent stays in the same state get -1 reward.
+
+## Value Functions: How Good is a Policy?
+
+- A value function estimates expected future reward from each state under a given policy.
+- Key for comparing policies.
+- In the maze:
+  - Value of a state = how close it is (in terms of reward) to the goal if you follow the policy.
+
+## Two Ways to Evaluate Policies
+
+- Solve the Bellman equation: A system of linear equations ($As + b = 0$).
+- Iterative Policy Evaluation (preferred for large problems):
+- Estimate values over multiple passes.
+- More computationally feasible.
+
+## Policy Improvement & Optimization
+
+- Once a policy is evaluated, improve it: Adjust actions in high-value states to boost future reward.
+- Repeat:
+  - Evaluate policy.
+  - Improve policy.
+  - Repeat until convergence (i.e., policy stops changing).
+- Result: optimal policy (may be multiple equally good options).
+
+## The Core Loop of Reinforcement Learning
+
+- Define the problem: Set up states, actions, and rewards.
+- Evaluate a policy: Understand how good the current strategy is.
+    *Improve the policy: Make smarter decisions based on value.
+    * Repeat until convergence.
+
+## Final Thoughts
+
+- RL is powerful because of its simplicity: learn by interacting.
+  - Sutton & Barto distill it into fundamental ideas—elegant, even if the math gets heavy.
+  - At its core: define, evaluate, improve, repeat.

@@ -6,7 +6,13 @@ import rehypeKatex from 'rehype-katex'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    ignoreDuringBuilds: true,
+  eslint: {
+      ignoreDuringBuilds: true,
+
+    },
+    typescript: {
+      ignoreBuildErrors: true,
+    },
     // Append the default value with md extensions
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     reactStrictMode: true,

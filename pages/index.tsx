@@ -28,7 +28,7 @@ const blog_metadata: any[] = [
 
 const Home: NextPage = () => {
   return (
-    <div className=" sm:mx-0 md:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10 mb-20">
+    <div className="font-mono sm:mx-0 md:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10 mb-20">
       <Navbar />
       <section className="space-y-2">
         <BlogPostListView blogs={blog_metadata} />
@@ -48,6 +48,5 @@ const Home: NextPage = () => {
     </div>
   );
 };
-
 
 export default Home;

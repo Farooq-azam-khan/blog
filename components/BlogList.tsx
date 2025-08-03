@@ -1,5 +1,13 @@
-import React from 'react';
-
+import React from "react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 export type BlogDate = {
   month: string;
   year: number;
@@ -16,38 +24,38 @@ export type BlogMetaData = {
 // Convert month name or abbreviation to month index (0 = January)
 function getMonthIndex(month: string): number {
   switch (month) {
-    case 'January':
-    case 'Jan':
+    case "January":
+    case "Jan":
       return 0;
-    case 'February':
-    case 'Feb':
+    case "February":
+    case "Feb":
       return 1;
-    case 'March':
-    case 'Mar':
+    case "March":
+    case "Mar":
       return 2;
-    case 'April':
-    case 'Apr':
+    case "April":
+    case "Apr":
       return 3;
-    case 'May':
+    case "May":
       return 4;
-    case 'June':
+    case "June":
       return 5;
-    case 'July':
+    case "July":
       return 6;
-    case 'August':
-    case 'Aug':
+    case "August":
+    case "Aug":
       return 7;
-    case 'September':
-    case 'Sept':
+    case "September":
+    case "Sept":
       return 8;
-    case 'October':
-    case 'Oct':
+    case "October":
+    case "Oct":
       return 9;
-    case 'November':
-    case 'Nov':
+    case "November":
+    case "Nov":
       return 10;
-    case 'December':
-    case 'Dec':
+    case "December":
+    case "Dec":
       return 11;
     default:
       return 0;
@@ -57,9 +65,13 @@ function getMonthIndex(month: string): number {
 // Create a Date object from published_date metadata
 function getDateObj(published_date: BlogDate): Date {
   let day = published_date.date;
-  day = day.replace(/st|nd|rd|th/, '');
+  day = day.replace(/st|nd|rd|th/, "");
   const dateNum = parseInt(day, 10);
-  return new Date(published_date.year, getMonthIndex(published_date.month), dateNum);
+  return new Date(
+    published_date.year,
+    getMonthIndex(published_date.month),
+    dateNum
+  );
 }
 
 // Format publication date for display
@@ -68,23 +80,48 @@ export function displayPublicationDate(pub_date: BlogDate): string {
 }
 
 // Single blog post view
-export const BlogPostView: React.FC<{ meta_data: BlogMetaData }> = ({ meta_data }) => {
+export const BlogPostView: React.FC<{ meta_data: BlogMetaData }> = ({
+  meta_data,
+}) => {
   const display_str = displayPublicationDate(meta_data.published_date);
   return (
-    <div className="hover:bg-indigo-50 py-2 rounded-sm hover:rounded-lg ease-in duration-200 border-l-4 border-white hover:border-indigo-400 px-3 flex flex-col space-y-2">
-      <span className="text-indigo-600">{display_str}</span>
-      <span className="mt-3">
-        <a href={meta_data.post_link}>{meta_data.title}</a>
-      </span>
-      <span className="text-gray-700">{meta_data.summary}</span>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{meta_data.title}</CardTitle>
+        <CardDescription>{display_str}</CardDescription>
+        <CardAction>
+          <Button variant="link">
+            <a href={meta_data.post_link}>Read</a>
+          </Button>
+        </CardAction>
+        <CardContent>{meta_data.summary}</CardContent>
+      </CardHeader>
+    </Card>
+    // <div className="hover:bg-indigo-50 py-2 rounded-sm hover:rounded-lg ease-in duration-200 border-l-4 border-white hover:border-indigo-400 px-3 flex flex-col space-y-2">
+    //   <span className="text-indigo-600">{display_str}</span>
+    //   <span className="mt-3">
+    //     <a href={meta_data.post_link}>{meta_data.title}</a>
+    //   </span>
+    //   <span className="text-gray-700">{meta_data.summary}</span>
+    // </div>
   );
 };
 
 // List view of multiple blog posts, sorted by date descending
-export const BlogPostListView: React.FC<{ blogs: BlogMetaData[] }> = ({ blogs }) => {
+export const BlogPostListView: React.FC<{ blogs: BlogMetaData[] }> = ({
+  blogs,
+}) => {
   const sorted = [...blogs].sort((a, b) => {
-    return getDateObj(b.published_date).getTime() - getDateObj(a.published_date).getTime();
+    return (
+      getDateObj(b.published_date).getTime() -
+      getDateObj(a.published_date).getTime()
+    );
   });
-  return <>{sorted.map((blog) => <BlogPostView meta_data={blog} key={blog.title} />)}</>;
-}
+  return (
+    <div className="space-y-6">
+      {sorted.map((blog) => (
+        <BlogPostView meta_data={blog} key={blog.title} />
+      ))}
+    </div>
+  );
+};

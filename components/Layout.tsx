@@ -55,7 +55,7 @@ const Layout = ({ children }: any) => {
       <div className="mt-10">
         <Navbar />
       </div>
-      <div className="w-full prose md:prose-lg lg:prose-xl 3xl:prose-2xl prose-p:text-background">
+      <div className="w-full prose md:prose-lg lg:prose-xl 3xl:prose-2xl prose-code:font-mono prose-p:text-foreground prose-li:text-foreground prose-p:font-normal prose-li:font-normal">
         <MDXProvider
           components={function () {
             return { pre: PreWithCopy };

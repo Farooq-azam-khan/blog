@@ -85,7 +85,7 @@ function PreWithCopy({ children }: any) {
 const Layout = ({ children }: any) => {
   useEffect(() => {}, []);
   return (
-    <div className="bg-secondary-background px-10 lg:mx-auto lg:max-w-6xl space-y-16 pb-10">
+    <div className="bg-secondary-background px-10 space-y-16 pb-10">
       <div className="pt-10">
         <Navbar />
       </div>

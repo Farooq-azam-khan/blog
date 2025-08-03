@@ -1,6 +1,10 @@
 import { MDXProvider } from "@mdx-js/react";
 import "katex/dist/katex.min.css";
-import { ClipboardDocumentIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import {
+  ClipboardDocumentIcon,
+  EyeIcon,
+  EyeSlashIcon,
+} from "@heroicons/react/24/solid";
 import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
 import "@wooorm/starry-night/style/dark";
@@ -66,9 +70,13 @@ function PreWithCopy({ children }: any) {
         className="absolute top-2 right-10 z-10 p-1 bg-stone-600 hover:bg-stone-500 rounded"
       >
         {visible ? (
-          <><EyeSlashIcon className="h-5 w-5 text-white" /></>
+          <>
+            <EyeSlashIcon className="h-5 w-5 text-white" />
+          </>
         ) : (
-          <><EyeIcon className="h-5 w-5 text-white" /></>
+          <>
+            <EyeIcon className="h-5 w-5 text-white" />
+          </>
         )}
       </button>
     </div>
@@ -77,14 +85,12 @@ function PreWithCopy({ children }: any) {
 const Layout = ({ children }: any) => {
   useEffect(() => {}, []);
   return (
-    <div className="px-10 lg:mx-auto lg:max-w-6xl mb-10 space-y-16">
-      <div className="mt-10">
+    <div className="bg-secondary-background px-10 lg:mx-auto lg:max-w-6xl space-y-16 pb-10">
+      <div className="pt-10">
         <Navbar />
       </div>
       <div className="w-full prose md:prose-lg lg:prose-xl 3xl:prose-2xl prose-code:font-mono prose-p:text-foreground prose-li:text-foreground prose-p:font-normal prose-li:font-normal">
-        <MDXProvider components={{ pre: PreWithCopy }}>
-          {children}
-        </MDXProvider>
+        <MDXProvider components={{ pre: PreWithCopy }}>{children}</MDXProvider>
       </div>
     </div>
   );

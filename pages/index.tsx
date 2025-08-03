@@ -1,78 +1,28 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
+// Blog post metadata imported from MDX pages
+import { meta as iterativeMeta } from "./iterative-policy-evaluation-in-a-nutshell.mdx";
+import { meta as rlMeta } from "./rl-in-a-nutshell.mdx";
+import { meta as logisticMeta } from "./logistic-regression-with-gradient-descent.mdx";
+import { meta as mleMeta } from "./mle.mdx";
+import { meta as tfidfMeta } from "./tfidf.mdx";
+import { meta as techStackMeta } from "./tech-stack.mdx";
+import { meta as fastLLMMeta } from "./fast-llm-inferencing.mdx";
+import { meta as vectorComparisonMeta } from "./cosine-similarity-pt-2.mdx";
+import { meta as cosineMeta } from "./cosine-similarity.mdx";
+import { meta as d3Meta } from "./d3-tutorial.mdx";
 
-export const mle_metadata = {
-  title: "Importance of Maximum Likelihood Estimation for Machine Learning",
-  published_date: { month: "January", date: "11th", year: 2025 },
-  summary:
-    "In this blog post I explain how the Maximum Likelihood Estimator is used in Machine Learning.",
-  post_link: "/mle",
-};
-
-// TODO: dynamically render meta data
 const blog_metadata: any[] = [
-  {
-    title: "Iterative Policy Evaluation in a Nutshell",
-    published_date: { month: "Aug", date: "3rd", year: 2025 }
-    , summary: "Check if an agent is doing the right thing with Policy Evaluation Methods"
-    , post_link: "iterative-policy-evaluation-in-a-nutshell"
-  },
-  {
-    title: "RL in a Nutshell",
-    published_date: { month: "Aug", date: "2nd", year: 2025 }
-    , summary: "Reinforcement learning is about an agent learning to make better decisions through trial and error to maximize long-term rewards. What does that entail in practice?"
-    , post_link: "rl-in-a-nutshell"
-  },
-  {
-    title: "Logistic Regression with Gradient Descent",
-    published_date: { month: "January", date: "19th", year: 2025 },
-    summary: "Details on how the gradient decent algorithm is implemented.",
-    post_link: "/logistic-regression-with-gradient-descent",
-  },
-  mle_metadata,
-  {
-    title: "Term Frequency-Inverse Document Frequency",
-    published_date: { month: "August", date: "1th", year: 2022 },
-    summary:
-      "In this tutorial we will look at what TF and IDF are and how they can be use to process text data in Machine learning.",
-    post_link: "tfidf",
-  },
-  {
-    title: "Tech stack for rapid prototyping applications",
-    published_date: { month: "June", date: "3rd", year: 2023 },
-    summary:
-      "In this blog I will focus on the ways in which I set up a backend and frontend to do rapid prototyping of full stack applications.",
-    post_link: "tech-stack",
-  },
-  {
-    title: "Scaling LLMs with Triton Inference Server: A Hands-on Guide",
-    published_date: { month: "November", date: "11th", year: 2024 },
-    summary:
-      "Get hands-on experience with deploying Large Language Models (LLMs) at scale using NVIDIA's Triton Inference Server. ",
-    post_link: "fast-llm-inferencing",
-  },
-  {
-    title: "Large Scale Vector Comparison",
-    published_date: { month: "July", date: "9th", year: 2022 },
-    summary:
-      "In this post, we will look at the quora qna dataset and aim to encode and compare all question pairs. The purpose of is to look at a real dataset.",
-    post_link: "cosine-similarity-pt-2",
-  },
-  {
-    title: "Comparing Vectors with Cosine Simlarity Function",
-    published_date: { month: "July", date: "4th", year: 2022 },
-    summary:
-      "This tutorial will focus on the math behind text vector similarity using numpy, pytorch, and stentence-transformers libraries in python.",
-    post_link: "cosine-similarity",
-  },
-  {
-    title: "D3 Tutorial",
-    published_date: { month: "December", date: "24th", year: 2019 },
-    summary:
-      "In this post, I outline the ways in which d3 library works with the <svg> elements.",
-    post_link: "d3-tutorial",
-    /* TODO: migrate d3 tutorial here  */
-  },
+  iterativeMeta,
+  rlMeta,
+  logisticMeta,
+  mleMeta,
+  tfidfMeta,
+  techStackMeta,
+  fastLLMMeta,
+  vectorComparisonMeta,
+  cosineMeta,
+  d3Meta,
 ];
 type BlogDate = {
   month: string;
@@ -125,6 +75,7 @@ function BlogPostListView({ blogs }: { blogs: BlogMetaData[] }) {
   return (
     <>
       {blogs_clone.map((blog) => {
+        console.log(blog);
         return <BlogPostView meta_data={blog} key={blog.title} />;
       })}
     </>

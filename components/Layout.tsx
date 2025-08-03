@@ -1,8 +1,8 @@
 import { MDXProvider } from "@mdx-js/react";
 import "katex/dist/katex.min.css";
-import { ClipboardDocumentIcon } from "@heroicons/react/24/solid";
+import { ClipboardDocumentIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import Navbar from "./Navbar";
-import { useEffect } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
 import "@wooorm/starry-night/style/dark";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -35,8 +35,12 @@ function innerText(jsx: any) {
   return "";
 }
 
+// Context to control visibility of code blocks
+const CodeVisibilityContext = createContext({ showCode: true, toggleShowCode: () => {} });
 function PreWithCopy({ children }: any) {
+  const { showCode } = useContext(CodeVisibilityContext);
   const txt = innerText(children);
+  if (!showCode) return null;
   return (
     <div className="relative my-6">
       <pre className="overflow-x-auto bg-stone-700 rounded-md p-4">
@@ -54,22 +58,37 @@ function PreWithCopy({ children }: any) {
   );
 }
 const Layout = ({ children }: any) => {
+  const [showCode, setShowCode] = useState(true);
+  const toggleShowCode = () => setShowCode((prev) => !prev);
   useEffect(() => {}, []);
   return (
-    <div className="px-10 lg:mx-auto lg:max-w-6xl mb-10 space-y-16">
-      <div className="mt-10">
-        <Navbar />
+    <CodeVisibilityContext.Provider value={{ showCode, toggleShowCode }}>
+      <div className="px-10 lg:mx-auto lg:max-w-6xl mb-10 space-y-16">
+        <div className="mt-10">
+          <Navbar />
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={toggleShowCode}
+            className="flex items-center space-x-1 mb-4 px-2 py-1 bg-stone-700 text-white rounded hover:bg-stone-600"
+          >
+            {showCode ? (
+              <><EyeSlashIcon className="h-5 w-5" /><span>Hide Code</span></>
+            ) : (
+              <><EyeIcon className="h-5 w-5" /><span>Show Code</span></>
+            )}
+          </button>
+        </div>
+        <div className="w-full prose md:prose-lg lg:prose-xl 3xl:prose-2xl prose-code:font-mono prose-p:text-foreground prose-li:text-foreground prose-p:font-normal prose-li:font-normal">
+          <MDXProvider
+            components={() => ({ pre: PreWithCopy })}
+          >
+            {children}
+          </MDXProvider>
+        </div>
       </div>
-      <div className="w-full prose md:prose-lg lg:prose-xl 3xl:prose-2xl prose-code:font-mono prose-p:text-foreground prose-li:text-foreground prose-p:font-normal prose-li:font-normal">
-        <MDXProvider
-          components={function () {
-            return { pre: PreWithCopy };
-          }}
-        >
-          {children}
-        </MDXProvider>
-      </div>
-    </div>
+    </CodeVisibilityContext.Provider>
   );
 };
 

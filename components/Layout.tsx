@@ -38,14 +38,19 @@ function innerText(jsx: any) {
 function PreWithCopy({ children }: any) {
   const txt = innerText(children);
   return (
-    <pre className="relative bg-stone-700">
-      {children}
-      <button className="absolute right-0 top-0 z-10 p-1 rounded-md ">
-        <CopyToClipboard text={txt}>
-          <ClipboardDocumentIcon className="h-6 w-6 " />
-        </CopyToClipboard>
-      </button>
-    </pre>
+    <div className="relative my-6">
+      <pre className="overflow-x-auto bg-stone-700 rounded-md p-4">
+        {children}
+      </pre>
+      <CopyToClipboard text={txt}>
+        <button
+          type="button"
+          className="absolute top-2 right-2 z-10 p-1 bg-stone-600 hover:bg-stone-500 rounded"
+        >
+          <ClipboardDocumentIcon className="h-5 w-5 text-white" />
+        </button>
+      </CopyToClipboard>
+    </div>
   );
 }
 const Layout = ({ children }: any) => {

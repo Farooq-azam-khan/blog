@@ -71,7 +71,7 @@ export function displayPublicationDate(pub_date: BlogDate): string {
 export const BlogPostView: React.FC<{ meta_data: BlogMetaData }> = ({ meta_data }) => {
   const display_str = displayPublicationDate(meta_data.published_date);
   return (
-    <div className="hover:bg-indigo-50 py-2 rounded hover:rounded-lg ease-in duration-200 border-l-4 border-white hover:border-indigo-400 px-3 flex flex-col space-y-2">
+    <div className="hover:bg-indigo-50 py-2 rounded-sm hover:rounded-lg ease-in duration-200 border-l-4 border-white hover:border-indigo-400 px-3 flex flex-col space-y-2">
       <span className="text-indigo-600">{display_str}</span>
       <span className="mt-3">
         <a href={meta_data.post_link}>{meta_data.title}</a>

@@ -25,18 +25,19 @@ const nextConfig = {
 // next.config.js
 
 const withMDX = createMDX({
-    extension: /\.mdx?$/,
-    options: {
-        remarkPlugins: [remarkMath],//[],
-        rehypePlugins: [rehypeKatex, 
-        // rehypeMathjax,
-            rehypeStarryNight
-        ],
-        // mdxRs: true, // experimental rust based compiler
-        // If you use `MDXProvider`, uncomment the following line.
-        providerImportSource: "@mdx-js/react",
-    }
-})
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [
+      // Configure KaTeX to ignore strict warnings (e.g., standalone \\\\)
+      [rehypeKatex, { strict: 'ignore' }],
+      // rehypeMathjax,
+      rehypeStarryNight,
+    ],
+    // mdxRs: true, // experimental rust based compiler
+    // If you use `MDXProvider`, uncomment the following line.
+    providerImportSource: "@mdx-js/react",
+  },
+});
 export default withMDX(nextConfig)
-
 

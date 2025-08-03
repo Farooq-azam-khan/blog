@@ -177,7 +177,6 @@ if __name__ == '__main__':
     agent = Agent()
     values = iterative_policy_eval(agent, env)
     
-    # Print nicely
     for state in sorted(env.states, key=lambda s: s.name):
         print(f"State {state.name}: V = {values[state.name]:.2f}")
 ```

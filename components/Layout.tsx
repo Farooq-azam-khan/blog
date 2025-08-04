@@ -83,7 +83,7 @@ function PreWithCopy({ children }: any) {
   );
 }
 const Layout = ({ children }: any) => {
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   return (
     <div className="bg-secondary-background px-10 space-y-16 pb-10">
       <div className="pt-10">

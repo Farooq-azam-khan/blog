@@ -12,6 +12,7 @@ import { meta as fastLLMMeta } from "./fast-llm-inferencing.mdx";
 import { meta as vectorComparisonMeta } from "./cosine-similarity-pt-2.mdx";
 import { meta as cosineMeta } from "./cosine-similarity.mdx";
 import { meta as d3Meta } from "./d3-tutorial.mdx";
+import { meta as policyiterMeta } from "./policy-iteration.mdx";
 
 const blog_metadata: any[] = [
   iterativeMeta,
@@ -24,6 +25,7 @@ const blog_metadata: any[] = [
   vectorComparisonMeta,
   cosineMeta,
   d3Meta,
+  policyiterMeta,
 ];
 
 const Home: NextPage = () => {

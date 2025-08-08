@@ -13,11 +13,12 @@ export async function getAllBlogs(): Promise<BlogMetaData[]> {
   for (const entry of entries) {
     // Only MDX files (skip _app.tsx, index.tsx, etc.)
     if (!entry.endsWith(".mdx")) continue;
-    const filePath = path.join(pagesDir, entry);
-    const slug = entry.replace(/\.mdx$/, "");
-    // Dynamically import the MDX module to access its meta export
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const mod = await import(path.join(pagesDir, entry));
+    // Dynamically import the MDX page to read its exported meta
+    // This import path is relative to this file, allowing webpack to include all MDX modules
+    const mod = await import(
+      /* webpackChunkName: "blog-[request]" */
+      `../pages/${entry}`
+    );
     if (mod.meta) {
       const meta = mod.meta as BlogMetaData;
       blogs.push({ ...meta });

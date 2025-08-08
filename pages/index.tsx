@@ -9,12 +9,12 @@ export const getStaticProps: GetStaticProps<{ blogs: BlogMetaData[] }> = async (
   return { props: { blogs } };
 };
 
-const Home: NextPage = () => {
+const Home: NextPage<{ blogs: BlogMetaData[] }> = ({ blogs }) => {
   return (
     <div className="font-mono sm:mx-0 md:mx-auto prose lg:prose-lg sm:max-w-xl lg:max-w-3xl mt-10 mb-20">
       <Navbar />
       <section className="space-y-2">
-        <BlogPostListView blogs={blog_metadata} />
+        <BlogPostListView blogs={blogs} />
       </section>
       {/* <section>
         <h2 className='text-gray-700'>Drafts</h2>

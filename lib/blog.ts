@@ -24,5 +24,8 @@ export async function getAllBlogs(): Promise<BlogMetaData[]> {
       blogs.push({ ...meta });
     }
   }
-  return blogs;
+  console.log({blogs})
+  const filteredBlogs = blogs.filter((blog) => blog.title && blog.title.length > 0);
+  // Sort by date descending
+  return filteredBlogs;
 }

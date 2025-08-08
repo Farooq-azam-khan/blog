@@ -4,3 +4,4 @@ build.css
 elm.js
 dist
 .next
+*.env.*

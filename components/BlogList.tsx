@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Star39 from "@/components/stars/s39";
 import { Button } from "@/components/ui/button";
 export type BlogDate = {
   month: string;
@@ -109,7 +110,7 @@ export const BlogPostView: React.FC<{ meta_data: BlogMetaData }> = ({
             ))}
           </div>
         )}
-        <Button className="w-full">
+        <Button asChild className="w-full">
           <a href={meta_data.post_link}>Read Post →</a>
         </Button>
       </CardFooter>
@@ -128,10 +129,16 @@ export const BlogPostListView: React.FC<{ blogs: BlogMetaData[] }> = ({
     );
   });
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="mx-2 sm:mx-10 my-10 grid md:grid-cols-3 gap-5 md:gap-2">
       {sorted.map((blog, idx) => (
         <>
           <BlogPostView meta_data={blog} key={blog.title} />
+          {/* <div className="col-span-1"></div> */}
+          <div className="hidden md:block">
+            <div className="text-main  flex items-center justify-center w-full h-full">
+              <Star39 className="w-24 h-24" />
+            </div>
+          </div>
         </>
       ))}
     </div>

@@ -13,7 +13,7 @@ export const getStaticProps: GetStaticProps<{
 
 const Home: NextPage<{ blogs: BlogMetaData[] }> = ({ blogs }) => {
   return (
-    <div className="font-mono  prose lg:prose-lg  w-full mt-10 mb-20">
+    <div className="my-10">
       <Navbar />
       <section className="space-y-2">
         <BlogPostListView blogs={blogs} />

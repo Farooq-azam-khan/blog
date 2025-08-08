@@ -83,16 +83,18 @@ function PreWithCopy({ children }: any) {
   );
 }
 const Layout = ({ children }: any) => {
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
   return (
-    <div className="bg-secondary-background px-10 space-y-16 pb-10">
-      <div className="pt-10">
-        <Navbar />
+    <>
+      <Navbar />
+      <div className="bg-secondary-background px-10 space-y-16 pb-10">
+        <div className="w-full prose md:prose-lg lg:prose-xl 3xl:prose-2xl prose-code:font-mono prose-p:text-foreground prose-li:text-foreground prose-p:font-normal prose-li:font-normal">
+          <MDXProvider components={{ pre: PreWithCopy }}>
+            {children}
+          </MDXProvider>
+        </div>
       </div>
-      <div className="w-full prose md:prose-lg lg:prose-xl 3xl:prose-2xl prose-code:font-mono prose-p:text-foreground prose-li:text-foreground prose-p:font-normal prose-li:font-normal">
-        <MDXProvider components={{ pre: PreWithCopy }}>{children}</MDXProvider>
-      </div>
-    </div>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import {
   Card,
-  CardAction,
+  CardFooter,
   CardContent,
   CardDescription,
   CardHeader,
@@ -19,6 +19,7 @@ export type BlogMetaData = {
   summary: string;
   post_link: string;
   published_date: BlogDate;
+  tags?: string[]; // Optional tags for categorization
 };
 
 // Convert month name or abbreviation to month index (0 = January)
@@ -85,25 +86,34 @@ export const BlogPostView: React.FC<{ meta_data: BlogMetaData }> = ({
 }) => {
   const display_str = displayPublicationDate(meta_data.published_date);
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{meta_data.title}</CardTitle>
+    <Card className="flex flex-col">
+      <CardHeader className="pb-0">
+        <CardTitle className="text-2xl md:text-3xl">
+          {meta_data.title}
+        </CardTitle>
         <CardDescription>{display_str}</CardDescription>
-        <CardAction>
-          <Button variant="link">
-            <a href={meta_data.post_link}>Read</a>
-          </Button>
-        </CardAction>
-        <CardContent>{meta_data.summary}</CardContent>
       </CardHeader>
+      <CardContent className="pt-0 flex-1">
+        <p>{meta_data.summary}</p>
+      </CardContent>
+      <CardFooter className="flex flex-col items-start space-y-4 p-6 pt-0">
+        {meta_data.tags && (
+          <div className="flex flex-wrap gap-2">
+            {meta_data.tags.map((tag) => (
+              <span
+                key={tag}
+                className="border-2 border-border px-2 py-1 text-xs uppercase"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+        <Button className="w-full">
+          <a href={meta_data.post_link}>Read Post →</a>
+        </Button>
+      </CardFooter>
     </Card>
-    // <div className="hover:bg-indigo-50 py-2 rounded-sm hover:rounded-lg ease-in duration-200 border-l-4 border-white hover:border-indigo-400 px-3 flex flex-col space-y-2">
-    //   <span className="text-indigo-600">{display_str}</span>
-    //   <span className="mt-3">
-    //     <a href={meta_data.post_link}>{meta_data.title}</a>
-    //   </span>
-    //   <span className="text-gray-700">{meta_data.summary}</span>
-    // </div>
   );
 };
 
@@ -118,9 +128,11 @@ export const BlogPostListView: React.FC<{ blogs: BlogMetaData[] }> = ({
     );
   });
   return (
-    <div className="space-y-6">
-      {sorted.map((blog) => (
-        <BlogPostView meta_data={blog} key={blog.title} />
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {sorted.map((blog, idx) => (
+        <>
+          <BlogPostView meta_data={blog} key={blog.title} />
+        </>
       ))}
     </div>
   );
